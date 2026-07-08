@@ -133,7 +133,7 @@ export default function QuestionCard({
           className="flex min-h-screen w-full flex-col items-center justify-center
                      bg-[#14181B] px-6 py-16 text-center outline-none"
         >
-          <p className="max-w-2xl whitespace-pre-line font-[family-name:'Fraunces',serif]
+          <p className="max-w-2xl whitespace-pre-line font-[family-name:'Cabinet_Grotesk',sans-serif]
                         text-2xl leading-relaxed text-[#F2EFE9] md:text-4xl">
             {scenario.description}
           </p>
@@ -144,7 +144,7 @@ export default function QuestionCard({
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="mt-12 rounded-full border border-[#E8A33D]/60 bg-[#E8A33D]/10
-                       px-10 py-4 font-[family-name:'Inter',sans-serif] text-base text-[#F2EFE9]
+                       px-10 py-4 font-[family-name:'Cabinet_Grotesk',sans-serif] text-base text-[#F2EFE9]
                        transition-colors hover:bg-[#E8A33D]/20
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60
                        md:text-lg"
@@ -175,7 +175,7 @@ export default function QuestionCard({
         <div className="mb-6 flex items-center justify-between">
           <span
             className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs tracking-wide
-                        font-[family-name:'IBM_Plex_Mono',monospace]"
+                        font-[family-name:'Cabinet_Grotesk',monospace]"
             style={{
               borderColor: scenario.isEnding ? "#C1502E66" : "#E8A33D66",
               color: scenario.isEnding ? "#E8896F" : "#E8A33D",
@@ -184,7 +184,7 @@ export default function QuestionCard({
             {scenario.isEnding ? "OUTCOME" : "CASE"} {scenario.id}
           </span>
           {stepLabel && !scenario.isEnding && (
-            <span className="font-[family-name:'IBM_Plex_Mono',monospace] text-xs text-white/40">
+            <span className="font-[family-name:'Cabinet_Grotesk',monospace] text-xs text-white/40">
               {stepLabel}
             </span>
           )}
@@ -192,19 +192,19 @@ export default function QuestionCard({
 
         {/* Title */}
         <h1
-          className="mb-4 font-[family-name:'Fraunces',serif] text-3xl leading-tight text-[#F2EFE9] md:text-4xl"
+          className="mb-4 font-[family-name:'Cabinet_Grotesk',sans-serif] text-3xl leading-tight text-[#F2EFE9] md:text-4xl"
         >
           {scenario.title}
         </h1>
 
         {/* Description */}
-        <p className="mb-6 font-[family-name:'Inter',sans-serif] text-base leading-relaxed text-[#F2EFE9]/80 md:text-lg">
+        <p className="mb-6 font-[family-name:'Cabinet_Grotesk',sans-serif] text-base leading-relaxed text-[#F2EFE9]/80 md:text-lg">
           {scenario.description}
         </p>
 
         {/* Supporting info, if present */}
         {scenario.supportingInfo && (
-          <div className="mb-8 rounded-lg border border-white/10 bg-white/[0.03] p-4 font-[family-name:'Inter',sans-serif] text-sm leading-relaxed text-[#F2EFE9]/60">
+          <div className="mb-8 rounded-lg border border-white/10 bg-white/[0.03] p-4 font-[family-name:'Cabinet_Grotesk',sans-serif] text-sm leading-relaxed text-[#F2EFE9]/60">
             {scenario.supportingInfo}
           </div>
         )}
@@ -212,7 +212,7 @@ export default function QuestionCard({
         {/* Ending state: show outcome, optional restart */}
         {scenario.isEnding ? (
           <div className="mt-8">
-            <p className="font-[family-name:'Fraunces',serif] text-xl text-[#E8896F] md:text-2xl">
+            <p className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-xl text-[#E8896F] md:text-2xl">
               {scenario.outcome}
             </p>
             {onRestart && (
@@ -220,7 +220,7 @@ export default function QuestionCard({
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleRestart}
-                className="mt-8 rounded-xl border border-white/15 px-6 py-3 font-[family-name:'Inter',sans-serif]
+                className="mt-8 rounded-xl border border-white/15 px-6 py-3 font-[family-name:'Cabinet_Grotesk',sans-serif]
                            text-sm text-[#F2EFE9]/80 transition-colors hover:border-[#E8A33D]/50 hover:text-[#F2EFE9]
                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60"
               >
@@ -245,7 +245,7 @@ export default function QuestionCard({
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="mt-1 font-[family-name:'IBM_Plex_Mono',monospace] text-xs text-white/40"
+                  className="mt-1 font-[family-name:'Cabinet_Grotesk',monospace] text-xs text-white/40"
                 >
                   Press Enter to continue
                 </motion.p>
@@ -290,7 +290,7 @@ function ChoiceButton({
                   }`}
     >
       <span
-        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-[family-name:'IBM_Plex_Mono',monospace] text-xs
+        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-[family-name:'Cabinet_Grotesk',monospace] text-xs
                     ${
                       isSelected
                         ? "bg-[#E8A33D] text-[#14181B]"
@@ -299,7 +299,7 @@ function ChoiceButton({
       >
         {index + 1}
       </span>
-      <span className="font-[family-name:'Inter',sans-serif] text-base text-[#F2EFE9]/90 md:text-lg">
+      <span className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-base text-[#F2EFE9]/90 md:text-lg">
         {choice.text}
       </span>
     </motion.button>

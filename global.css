@@ -15,9 +15,9 @@
   --color-accent: #e8a33d;
   --color-danger: #c1502e;
 
-  --font-display: "Fraunces", ui-serif, serif;
-  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+--font-display: "Cabinet Grotesk", ui-serif, serif;
+  --font-body: "Cabinet Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Cabinet Grotesk", ui-monospace, monospace;
 
   --radius-card: 1rem;
 }

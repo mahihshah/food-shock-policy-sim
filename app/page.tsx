@@ -72,7 +72,7 @@ const progressRatio = Math.min(getGameplayDecisionsCount(gameState) / TOTAL_DECI
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-[#14181B] px-4 py-12">
       <div className="mb-8 w-full max-w-2xl">
-        <div className="mb-2 flex items-center justify-between font-[family-name:'IBM_Plex_Mono',monospace] text-xs text-white/40">
+        <div className="mb-2 flex items-center justify-between font-[family-name:'Cabinet_Grotesk',monospace] text-xs text-white/40">
           <span>{gameState.isEnded ? "Simulation complete" : getStepLabel(gameState)}</span>
           <span>{Math.round(progressRatio * 100)}%</span>
         </div>
