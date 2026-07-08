@@ -8,6 +8,7 @@
 // SHAPE
 // -----------------------------------------------------------------------------
 
+
 export interface Choice {
   /** Text shown on the button/card for this choice */
   text: string;
@@ -26,6 +27,8 @@ export interface Choice {
    */
   descriptionHtml?: string;
 }
+
+
 
 export interface Scenario {
   /** Unique id. Other scenarios reference this via Choice.nextId */
@@ -54,14 +57,40 @@ export interface Scenario {
    * Exactly 2 for branch scenarios, empty array for endings.
    * Each choice points to the next scenario via nextId.
    */
+
+  /** True for full-screen intro screens (landing, role briefing) that render without the case-file card and only need 1 choice */
+  isLanding?: boolean;
+
   choices: Choice[];
 }
+
+
+
+
 
 // -----------------------------------------------------------------------------
 // DATA
 // -----------------------------------------------------------------------------
 
 export const scenarios: Scenario[] = [
+{
+    id: "000",
+    title: "Landing",
+    description:
+      "Could you keep a nation fed?\n\nFood has always seemed plentiful.\nUntil now.\n\nOver the next few minutes, you'll make the same decisions governments face when food suddenly becomes scarce.\n\nEvery choice may solve one problem.\nAlmost every choice creates another.",
+    isStart: true,
+    isLanding: true,
+    choices: [{ text: "Start", nextId: "00" }],
+  },
+  {
+    id: "00",
+    title: "Role",
+    description:
+      "You are the Minister for Food Security.\n\nYour job is simple: make sure everyone has enough to eat, no matter what.",
+    isLanding: true,
+    choices: [{ text: "I'm ready for this", nextId: "0" }],
+  },
+  
   // ---------------------------------------------------------------------
   // START
   // ---------------------------------------------------------------------
@@ -70,7 +99,6 @@ export const scenarios: Scenario[] = [
     title: "Multiple Breadbasket Failure",
     description:
       "The Atlantic current stalls, and three of the world's grain belts fail in the same growing season.\n\nYou inherit a country with less food than it needs and a population that hasn't noticed, yet.",
-    isStart: true,
     choices: [
       { text: "Impose export controls", nextId: "1" },
       { text: "Impose a price ceiling on food", nextId: "2" },

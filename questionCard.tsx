@@ -113,6 +113,48 @@ export default function QuestionCard({
     console.log("[QuestionCard] Restart requested from ending scenario");
     onRestart?.();
   };
+ if (scenario.isLanding) {
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={scenario.id}
+          ref={cardRef}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              console.log("[QuestionCard] Enter pressed on landing scenario → confirming");
+              commitChoice(0);
+            }
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="flex min-h-screen w-full flex-col items-center justify-center
+                     bg-[#14181B] px-6 py-16 text-center outline-none"
+        >
+          <p className="max-w-2xl whitespace-pre-line font-[family-name:'Fraunces',serif]
+                        text-2xl leading-relaxed text-[#F2EFE9] md:text-4xl">
+            {scenario.description}
+          </p>
+
+          <motion.button
+            type="button"
+            onClick={() => commitChoice(0)}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="mt-12 rounded-full border border-[#E8A33D]/60 bg-[#E8A33D]/10
+                       px-10 py-4 font-[family-name:'Inter',sans-serif] text-base text-[#F2EFE9]
+                       transition-colors hover:bg-[#E8A33D]/20
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60
+                       md:text-lg"
+          >
+            {scenario.choices[0].text}
+          </motion.button>
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
 
   return (
     <AnimatePresence mode="wait">

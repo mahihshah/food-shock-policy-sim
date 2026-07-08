@@ -87,9 +87,14 @@ export function validateScenarioGraph(): ValidationResult {
       continue;
     }
 
-    if (scenario.choices.length !== 2) {
+    const expectedChoices = scenario.isLanding ? 1 : 2;
+    if (scenario.choices.length !== expectedChoices) {
       errors.push(
-        `Scenario "${scenario.id}" has ${scenario.choices.length} choice(s); non-ending scenarios should have exactly 2.`
+        `Scenario "${scenario.id}" has ${scenario.choices.length} choice(s); ${
+          scenario.isLanding
+            ? "landing scenarios should have exactly 1"
+            : "non-ending scenarios should have exactly 2"
+        }.`
       );
     }
 
@@ -165,10 +170,17 @@ export function isEndingReached(state: GameState): boolean {
   return state.isEnded;
 }
 
+/** Decisions made since leaving the landing/role-briefing screens — used to drive the progress bar so intro clicks aren't counted as gameplay decisions */
+export function getGameplayDecisionsCount(state: GameState): number {
+  return state.decisions.filter((d) => !scenariosById[d.fromScenarioId]?.isLanding).length;
+}
+
 /** 1-indexed count of "which decision is this", for UI labels like "Decision 3" */
 export function getStepLabel(state: GameState): string {
-  return `Decision ${state.decisions.length + 1}`;
+  return `Decision ${getGameplayDecisionsCount(state) + 1}`;
 }
+
+
 
 // -----------------------------------------------------------------------------
 // STATE TRANSITIONS

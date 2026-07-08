@@ -21,6 +21,7 @@ import {
   goToPreviousScenario,
   getCurrentScenario,
   getStepLabel,
+  getGameplayDecisionsCount,
   calculatePlaythroughMetrics,
   type GameState,
 } from "../gameLogic";
@@ -39,8 +40,7 @@ export default function Home() {
   });
 
   const currentScenario = getCurrentScenario(gameState);
-  const progressRatio = Math.min(gameState.decisions.length / TOTAL_DECISIONS, 1);
-
+const progressRatio = Math.min(getGameplayDecisionsCount(gameState) / TOTAL_DECISIONS, 1);
   // Log a final summary the moment an ending is reached — confirms the
   // whole chain (page → gameLogic → scenarios) is wired correctly end to end.
   useEffect(() => {
@@ -64,6 +64,10 @@ export default function Home() {
     console.log("[page] Back requested");
     setGameState((prev) => goToPreviousScenario(prev));
   };
+
+  if (currentScenario.isLanding) {
+    return <QuestionCard scenario={currentScenario} onSelectChoice={handleSelectChoice} />;
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-[#14181B] px-4 py-12">
