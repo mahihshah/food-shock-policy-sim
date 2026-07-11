@@ -232,13 +232,18 @@ export default function QuestionCard({
         ) : (
           <div className="mt-8 flex flex-col gap-3">
             {scenario.choices.map((choice, index) => (
-              <ChoiceButton
-                key={choice.nextId + index}
-                choice={choice}
-                index={index}
-                isSelected={selectedIndex === index}
-                onClick={() => handleClick(index)}
-              />
+              <div key={choice.nextId + index} className="relative">
+                <ChoiceButton
+                  choice={choice}
+                  index={index}
+                  isSelected={selectedIndex === index}
+                  onClick={() => handleClick(index)}
+                />
+                <CaseStudyPanel
+                  caseStudy={caseStudies[choice.nextId]}
+                  side={index === 0 ? "left" : "right"}
+                />
+              </div>
             ))}
             <AnimatePresence>
               {selectedIndex !== null && (
@@ -304,5 +309,49 @@ function ChoiceButton({
         {choice.text}
       </span>
     </motion.button>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Sub-component: real-world case study shown beside a choice
+// -----------------------------------------------------------------------------
+
+function CaseStudyPanel({
+  caseStudy,
+  side,
+}: {
+  caseStudy?: CaseStudy;
+  side: "left" | "right";
+}) {
+  if (!caseStudy) return null;
+
+  const isLeft = side === "left";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: isLeft ? 12 : -12 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.4, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+      className={`pointer-events-none absolute top-1/2 hidden w-56 -translate-y-1/2 lg:block
+                  ${isLeft ? "right-full mr-6" : "left-full ml-6"}`}
+    >
+      <div className="pointer-events-auto flex items-start gap-2">
+        {!isLeft && (
+          <span className="mt-1 shrink-0 text-[#E8A33D]/50">←</span>
+        )}
+        <div className="rounded-lg border border-white/20 bg-white/[0.06] p-3">
+          <div className="mb-1 flex items-center gap-1.5 font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-wide text-[#E8A33D]/80">
+            <span>{caseStudy.flag}</span>
+            <span>
+              {caseStudy.country}, {caseStudy.year}
+            </span>
+          </div>
+          <p className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-[13px] leading-snug text-white">
+            {caseStudy.text}
+          </p>
+        </div>
+        {isLeft && <span className="mt-1 shrink-0 text-[#E8A33D]/50">→</span>}
+      </div>
+    </motion.div>
   );
 }
