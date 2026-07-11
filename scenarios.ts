@@ -77,7 +77,7 @@ export const scenarios: Scenario[] = [
     id: "000",
     title: "Landing",
     description:
-      "Could you keep a nation fed?\n\nFood has always seemed plentiful.\nUntil now.\n\nOver the next few minutes, you'll make the same decisions governments face when food suddenly becomes scarce.\n\nEvery choice may solve one problem.\nAlmost every choice creates another.",
+      "Could you keep a nation fed?\n\nFood has always seemed plentiful.\nUntil now.\n\nOver the next few minutes, you'll make the same decisions governments face when food suddenly becomes scarce.",
     isStart: true,
     isLanding: true,
     choices: [{ text: "Start", nextId: "00" }],

@@ -25,6 +25,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Choice, Scenario } from "./scenarios";
+import { caseStudies, type CaseStudy } from "./caseStudies";
 // If you have a "@/*" path alias set up in tsconfig.json, you can use
 // `import type { Choice, Scenario } from "@/data/scenarios";` instead.
 
