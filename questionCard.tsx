@@ -381,7 +381,7 @@ function CaseStudyPanel({
       <motion.div
         initial={{ opacity: 0, x: isLeft ? 12 : -12 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.4, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.8, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
         className="pointer-events-auto flex items-center gap-2"
       >
         {!isLeft && (
