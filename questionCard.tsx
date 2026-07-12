@@ -342,11 +342,35 @@ function CaseStudyPanel({
           <span className="shrink-0 text-[#E8A33D]/50">←</span>
         )}
         <div className="rounded-lg border border-white/20 bg-white/[0.06] p-3">
-          <div className="mb-1 flex items-center gap-1.5 font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-wide text-[#E8A33D]/80">
-            <span>{caseStudy.flag}</span>
-            <span>
-              {caseStudy.country}, {caseStudy.year}
+          <div className="mb-1 flex items-center justify-between gap-1.5 font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-wide text-[#E8A33D]/80">
+            <span className="flex items-center gap-1.5">
+              <span>{caseStudy.flag}</span>
+              <span>
+                {caseStudy.country}, {caseStudy.year}
+              </span>
             </span>
+            {caseStudy.source && (
+              <span className="group/tooltip relative flex items-center">
+                <button
+                  type="button"
+                  aria-label="View reference"
+                  className="flex h-4 w-4 items-center justify-center rounded-full border border-[#E8A33D]/50 text-[9px] normal-case text-[#E8A33D]/70 transition-colors hover:border-[#E8A33D] hover:text-[#E8A33D] focus-visible:border-[#E8A33D] focus-visible:text-[#E8A33D]"
+                >
+                  i
+                </button>
+                <span
+                  role="tooltip"
+                  className="pointer-events-none absolute bottom-full right-0 z-50 mb-2 max-h-64 w-64 overflow-y-auto rounded-lg border border-white/20 bg-[#14181B] p-2.5 text-left normal-case tracking-normal opacity-0 shadow-xl transition-opacity duration-150 group-hover/tooltip:opacity-100 group-focus-within/tooltip:opacity-100"
+                >
+                  <span className="mb-1 block font-[family-name:'Cabinet_Grotesk',monospace] text-[10px] uppercase tracking-wide text-[#E8A33D]/70">
+                    Reference
+                  </span>
+                  <span className="block whitespace-pre-line text-[11px] leading-snug text-white/80">
+                    {caseStudy.source}
+                  </span>
+                </span>
+              </span>
+            )}
           </div>
           <p className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-[13px] leading-snug text-white">
             {caseStudy.text}
