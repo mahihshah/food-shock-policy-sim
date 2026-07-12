@@ -336,10 +336,10 @@ function CaseStudyPanel({
         initial={{ opacity: 0, x: isLeft ? 12 : -12 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.4, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-        className="pointer-events-auto flex items-start gap-2"
+        className="pointer-events-auto flex items-center gap-2"
       >
         {!isLeft && (
-          <span className="mt-1 shrink-0 text-[#E8A33D]/50">←</span>
+          <span className="shrink-0 text-[#E8A33D]/50">←</span>
         )}
         <div className="rounded-lg border border-white/20 bg-white/[0.06] p-3">
           <div className="mb-1 flex items-center gap-1.5 font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-wide text-[#E8A33D]/80">
@@ -352,7 +352,7 @@ function CaseStudyPanel({
             {caseStudy.text}
           </p>
         </div>
-        {isLeft && <span className="mt-1 shrink-0 text-[#E8A33D]/50">→</span>}
+        {isLeft && <span className="shrink-0 text-[#E8A33D]/50">→</span>}
       </motion.div>
     </div>
   );
