@@ -50,7 +50,7 @@ Glauber, Joseph, and Abdullah Mamun. "India's New Ban on Rice Exports: Potential
   "1.1": {
     flag: "🇪🇬",
     country: "Egypt",
-    year: "n/a",
+    year: "2008",
     text: `Banned rice exports to stockpile supply domestically. Traders moved thousands of tonnes across the Libyan and Sudanese desert borders, and through the ports of Alexandria and Port Said.`,
     source: `Dahan, Maha El, and Sherine El Madany. "Egypt's Rice Export Ban Only Benefits Smugglers." World. Reuters, 19 March 2012. https://www.reuters.com/article/world/egypts-rice-export-ban-only-benefits-smugglers-idUSBRE82I0HS/.
 

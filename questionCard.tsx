@@ -23,7 +23,7 @@
 // it'll just fall back to system fonts.
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import type { Choice, Scenario } from "./scenarios";
 import { caseStudies, type CaseStudy } from "./caseStudies";
 // If you have a "@/*" path alias set up in tsconfig.json, you can use
@@ -115,6 +115,27 @@ export default function QuestionCard({
     onRestart?.();
   };
  if (scenario.isLanding) {
+    // Split on blank lines so each paragraph can animate in on its own,
+    // staggered. First paragraph becomes the big standout headline; the
+    // rest render as smaller body text underneath.
+    const [headline, ...bodyParagraphs] = scenario.description.split("\n\n");
+
+ const containerVariants: Variants = {
+      hidden: {},
+      visible: {
+        transition: { staggerChildren: 0.4, delayChildren: 0.2 },
+      },
+    };
+
+    const lineVariants: Variants = {
+      hidden: { opacity: 0, y: 12 },
+      visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+      },
+    };
+
     return (
       <AnimatePresence mode="wait">
         <motion.div
@@ -132,26 +153,51 @@ export default function QuestionCard({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="flex min-h-screen w-full flex-col items-center justify-center
-                     bg-[#14181B] px-6 py-16 text-center outline-none"
+                     bg-[#14181B] px-6 py-12 text-center outline-none"
         >
-          <p className="max-w-2xl whitespace-pre-line font-[family-name:'Cabinet_Grotesk',sans-serif]
-                        text-2xl leading-relaxed text-[#F2EFE9] md:text-4xl">
-            {scenario.description}
-          </p>
-
-          <motion.button
-            type="button"
-            onClick={() => commitChoice(0)}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="mt-12 rounded-full border border-[#E8A33D]/60 bg-[#E8A33D]/10
-                       px-10 py-4 font-[family-name:'Cabinet_Grotesk',sans-serif] text-base text-[#F2EFE9]
-                       transition-colors hover:bg-[#E8A33D]/20
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60
-                       md:text-lg"
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex max-w-3xl flex-col items-center gap-5"
           >
-            {scenario.choices[0].text}
-          </motion.button>
+            <motion.h1
+              variants={lineVariants}
+              className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-4xl font-bold leading-[1.05]
+                         tracking-tight text-[#F2EFE9] sm:text-5xl md:text-6xl"
+            >
+              {headline}
+            </motion.h1>
+
+            {bodyParagraphs.map((paragraph, index) => (
+              <motion.p
+                key={index}
+                variants={lineVariants}
+                className="whitespace-pre-line font-[family-name:'Cabinet_Grotesk',sans-serif]
+                           text-lg leading-relaxed text-[#F2EFE9]/80 md:text-2xl"
+              >
+                {paragraph}
+              </motion.p>
+            ))}
+
+            <motion.div variants={lineVariants} className="mt-6">
+              <motion.button
+                type="button"
+                onClick={() => commitChoice(0)}
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="rounded-full border-2 border-[#E8A33D] bg-[#E8A33D]/10
+                           px-10 py-4 font-[family-name:'Cabinet_Grotesk',sans-serif] text-base font-bold text-[#F2EFE9]
+                           shadow-[0_0_30px_-5px_#E8A33D66] transition-colors hover:bg-[#E8A33D]/25
+                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60
+                           md:text-lg"
+              >
+                {scenario.choices[0].text}
+              </motion.button>
+            </motion.div>
+          </motion.div>
         </motion.div>
       </AnimatePresence>
     );
