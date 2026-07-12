@@ -328,14 +328,16 @@ function CaseStudyPanel({
   const isLeft = side === "left";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: isLeft ? 12 : -12 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.4, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+    <div
       className={`pointer-events-none absolute top-1/2 hidden w-56 -translate-y-1/2 lg:block
                   ${isLeft ? "right-full mr-6" : "left-full ml-6"}`}
     >
-      <div className="pointer-events-auto flex items-start gap-2">
+      <motion.div
+        initial={{ opacity: 0, x: isLeft ? 12 : -12 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        className="pointer-events-auto flex items-start gap-2"
+      >
         {!isLeft && (
           <span className="mt-1 shrink-0 text-[#E8A33D]/50">←</span>
         )}
@@ -351,7 +353,7 @@ function CaseStudyPanel({
           </p>
         </div>
         {isLeft && <span className="mt-1 shrink-0 text-[#E8A33D]/50">→</span>}
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
