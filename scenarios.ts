@@ -18,6 +18,12 @@ export interface Choice {
    * Optional supporting copy for this specific choice (e.g. "why this option
    * exists"). Separate from Scenario.description because a "problem" scenario
    * can have different framing per choice.
+   *
+   * WRITING RULE: this copy explains the MECHANISM only — what the policy
+   * literally does and why a minister might reach for it. It never hints at
+   * downsides, tradeoffs, or consequences. Those only ever show up on the
+   * NEXT screen, once the player has committed. Keeps every choice feeling
+   * like a genuinely live decision instead of a spoiler.
    */
   description?: string;
   /**
@@ -100,8 +106,18 @@ export const scenarios: Scenario[] = [
     description:
       "The Atlantic current stalls, and three of the world's grain belts fail in the same growing season.\n\nYou inherit a country with less food than it needs and a population that hasn't noticed, yet.",
     choices: [
-      { text: "Impose export controls", nextId: "1" },
-      { text: "Impose a price ceiling on food", nextId: "2" },
+      {
+        text: "Impose export controls",
+        nextId: "1",
+        description:
+          "Ban grain from leaving the country. Rather than letting price ration scarce food, cut off outflow directly and keep every available tonne within your own borders, where you control it.",
+      },
+      {
+        text: "Impose a price ceiling on food",
+        nextId: "2",
+        description:
+          "Set a legal maximum price for food, below what the market would otherwise charge. Keep essentials affordable and protect household budgets the moment the shock hits.",
+      },
     ],
   },
 
@@ -114,8 +130,18 @@ export const scenarios: Scenario[] = [
     description:
       "You stop grain from leaving the country, hoping to keep prices low at home.\n\nTwo of your neighbours respond by cutting off your fertiliser, and you realise you were never as self-sufficient as you thought…",
     choices: [
-      { text: "Maintain / intensify the ban", nextId: "1.1" },
-      { text: "Reduce restrictions", nextId: "1.2" },
+      {
+        text: "Maintain / intensify the ban",
+        nextId: "1.1",
+        description:
+          "Hold the line, or tighten the export ban further. Prioritise domestic supply above everything else and keep every tonne of grain inside your own borders.",
+      },
+      {
+        text: "Reduce restrictions",
+        nextId: "1.2",
+        description:
+          "Ease the export ban to repair trade relationships abroad. Reopen channels with partners and signal that you intend to keep trading, not retreat behind your borders.",
+      },
     ],
   },
 
@@ -126,8 +152,18 @@ export const scenarios: Scenario[] = [
     description:
       "You hold the line on exports.\n\nWithin weeks, however, grain is leaving anyway, just not through anywhere you control well: the border.",
     choices: [
-      { text: "Increase border enforcement", nextId: "1.1.1" },
-      { text: "Legalise some exports through a quota system", nextId: "1.1.2" },
+      {
+        text: "Increase border enforcement",
+        nextId: "1.1.1",
+        description:
+          "Deploy more customs officers, patrols and inspections at the border. Enforce the ban directly and physically stop grain crossing without authorisation.",
+      },
+      {
+        text: "Legalise some exports through a quota system",
+        nextId: "1.1.2",
+        description:
+          "Replace the blanket ban with a fixed, government-set quota. Allow a controlled volume of trade to continue each month while keeping the overall total capped.",
+      },
     ],
   },
 
@@ -138,8 +174,18 @@ export const scenarios: Scenario[] = [
     description:
       "You put more people and more money on the border, and the smuggling does slow down.\n\nYou just haven't worked out how you're paying for it yet.",
     choices: [
-      { text: "Increase taxes to fund enforcement", nextId: "1.1.1.1" },
-      { text: "Reduce government spending on other programs", nextId: "1.1.1.2" },
+      {
+        text: "Increase taxes to fund enforcement",
+        nextId: "1.1.1.1",
+        description:
+          "Raise tax revenue to cover the enforcement bill. Fund the border operation through the public purse, leaving other spending untouched.",
+      },
+      {
+        text: "Reduce government spending on other programs",
+        nextId: "1.1.1.2",
+        description:
+          "Redirect funds from other budgets to pay for enforcement. Cover the cost without raising taxes, keeping the burden on households unchanged.",
+      },
     ],
   },
   {
@@ -168,8 +214,18 @@ export const scenarios: Scenario[] = [
     description:
       "You open a small, controlled exception to keep your allies onside.\n\nEvery ally who didn't get one now wants to know why, and the ones who did want more.",
     choices: [
-      { text: "Prioritise allied nations", nextId: "1.1.2.1" },
-      { text: "Allocate based on humanitarian need", nextId: "1.1.2.2" },
+      {
+        text: "Prioritise allied nations",
+        nextId: "1.1.2.1",
+        description:
+          "Allocate the export quota to your closest diplomatic partners first. Reward existing alliances and strengthen ties with governments you already trust.",
+      },
+      {
+        text: "Allocate based on humanitarian need",
+        nextId: "1.1.2.2",
+        description:
+          "Direct the export quota toward the countries facing the most severe shortages. Base allocation on where the grain is needed most, not on existing alliances.",
+      },
     ],
   },
   {
@@ -198,8 +254,18 @@ export const scenarios: Scenario[] = [
     description:
       "You ease the export ban to repair relations abroad.\n\nAt home, prices start climbing before the ink is dry.",
     choices: [
-      { text: "Introduce targeted food vouchers", nextId: "1.2.1" },
-      { text: "Reduce food import tariffs on one staple food", nextId: "1.2.2" },
+      {
+        text: "Introduce targeted food vouchers",
+        nextId: "1.2.1",
+        description:
+          "Issue means-tested vouchers to the households who need help affording food most. Put support directly into the hands of those who need it, at a fraction of the cost of subsidising everyone.",
+      },
+      {
+        text: "Reduce food import tariffs on one staple food",
+        nextId: "1.2.2",
+        description:
+          "Cut the tax on importing one specific staple. Make foreign supply cheaper and get relief onto shelves within weeks.",
+      },
     ],
   },
 
@@ -210,8 +276,18 @@ export const scenarios: Scenario[] = [
     description:
       "You issue vouchers to the households that need them most, and for a moment it works.\n\nThen wealthier households, worried the shortage will reach them too, start buying like it already has.",
     choices: [
-      { text: "Introduce household purchasing limits", nextId: "1.2.1.1" },
-      { text: "Ease price-gouging laws (letting prices rise further)", nextId: "1.2.1.2" },
+      {
+        text: "Introduce household purchasing limits",
+        nextId: "1.2.1.1",
+        description:
+          "Cap how much of a staple any single household can buy per visit. Keep shelves stocked for everyone by rationing purchases evenly.",
+      },
+      {
+        text: "Ease price-gouging laws (letting prices rise further)",
+        nextId: "1.2.1.2",
+        description:
+          "Relax the rules on retail markups during shortages. Let price rise to reflect scarcity and let the market signal exactly how urgent the shortage is.",
+      },
     ],
   },
   {
@@ -240,8 +316,18 @@ export const scenarios: Scenario[] = [
     description:
       "You cut the tariff on one staple to bring relief fast.\n\nCheaper imports arrive within weeks, and your own farmers can't match the price.",
     choices: [
-      { text: "Provide temporary farmer income support", nextId: "1.2.2.1" },
-      { text: "Set a minimum support price / price floor for farmers", nextId: "1.2.2.2" },
+      {
+        text: "Provide temporary farmer income support",
+        nextId: "1.2.2.1",
+        description:
+          "Pay domestic farmers directly to offset cheaper imports. Keep local production running at full strength while consumers enjoy the lower import price.",
+      },
+      {
+        text: "Set a minimum support price / price floor for farmers",
+        nextId: "1.2.2.2",
+        description:
+          "Guarantee farmers a price no import can undercut. Protect domestic production with a fixed price floor, regardless of what imports cost.",
+      },
     ],
   },
   {
@@ -272,8 +358,18 @@ export const scenarios: Scenario[] = [
     description:
       "You cap the price of food directly.\n\nSuppliers respond by supplying less of it.",
     choices: [
-      { text: "Pay farmers a subsidy and make direct grain purchases", nextId: "2.1" },
-      { text: "Release national stockpiles", nextId: "2.2" },
+      {
+        text: "Pay farmers a subsidy and make direct grain purchases",
+        nextId: "2.1",
+        description:
+          "Subsidise domestic farmers and have the government buy grain directly. Combine both levers at once to guarantee shelves stay stocked.",
+      },
+      {
+        text: "Release national stockpiles",
+        nextId: "2.2",
+        description:
+          "Draw down the grain reserve your government has been building for exactly this moment. Put stored supply straight onto the market and stabilise prices immediately.",
+      },
     ],
   },
 
@@ -284,8 +380,18 @@ export const scenarios: Scenario[] = [
     description:
       "You subsidise farmers to keep output up and start buying grain directly to close the gap.\n\nThe shelves stay stocked, and the bill for keeping them that way lands on your desk every month.",
     choices: [
-      { text: "Subsidise only one staple crop", nextId: "2.1.1" },
-      { text: "Subsidise only small farmers", nextId: "2.1.2" },
+      {
+        text: "Subsidise only one staple crop",
+        nextId: "2.1.1",
+        description:
+          "Concentrate the entire subsidy budget on a single staple. Maximise the impact of every dollar spent by backing one crop fully.",
+      },
+      {
+        text: "Subsidise only small farmers",
+        nextId: "2.1.2",
+        description:
+          "Direct subsidy money specifically to smallholders. Support the farmers with the thinnest financial cushion and stretch a limited budget as far as it will go.",
+      },
     ],
   },
 
@@ -296,8 +402,18 @@ export const scenarios: Scenario[] = [
     description:
       "You put the subsidy behind a single staple to keep the programme affordable.\n\nDiets narrow along with it, and deficiencies start showing up in places your statistics don't cover yet.",
     choices: [
-      { text: "Mandate wheat fortification with iron & vitamins", nextId: "2.1.1.1" },
-      { text: "Expand school micronutrient feeding programs", nextId: "2.1.1.2" },
+      {
+        text: "Mandate wheat fortification with iron & vitamins",
+        nextId: "2.1.1.1",
+        description:
+          "Require a staple like flour to be fortified with essential micronutrients by law. Build nutrition directly into what people already eat every day.",
+      },
+      {
+        text: "Expand school micronutrient feeding programs",
+        nextId: "2.1.1.2",
+        description:
+          "Deliver fortified meals directly through the school system. Reach children during the years nutrition matters most.",
+      },
     ],
   },
   {
@@ -328,8 +444,18 @@ export const scenarios: Scenario[] = [
     description:
       "You direct the subsidy toward small farmers, the group with the least cushion.\n\nLarge farms, without the same support, start failing anyway, and they were carrying more of the harvest than anyone admitted.",
     choices: [
-      { text: "Nationalise large farms", nextId: "2.1.2.1" },
-      { text: "Allow large farms to fail", nextId: "2.1.2.2" },
+      {
+        text: "Nationalise large farms",
+        nextId: "2.1.2.1",
+        description:
+          "Bring failing large farms under direct state ownership. Take control of production yourself and keep output flowing under government management.",
+      },
+      {
+        text: "Allow large farms to fail",
+        nextId: "2.1.2.2",
+        description:
+          "Let unprofitable large farms close on their own terms. Let the market reallocate resources without government intervention.",
+      },
     ],
   },
   {
@@ -358,8 +484,18 @@ export const scenarios: Scenario[] = [
     description:
       "You draw down the national grain reserve to hold prices steady.\n\nIt works, until you try to refill it, and the world notices exactly how much you're buying. Markets respond in kind with higher world prices… again.",
     choices: [
-      { text: "Divert crop use away from animal feed", nextId: "2.2.1" },
-      { text: "Divert crop use away from biofuels", nextId: "2.2.2" },
+      {
+        text: "Divert crop use away from animal feed",
+        nextId: "2.2.1",
+        description:
+          "Redirect grain earmarked for livestock feed toward direct human consumption instead. Route calories straight to people rather than through animals first.",
+      },
+      {
+        text: "Divert crop use away from biofuels",
+        nextId: "2.2.2",
+        description:
+          "Redirect crops grown for biofuel back into the food supply. Prioritise plates over fuel tanks.",
+      },
     ],
   },
 
@@ -370,8 +506,18 @@ export const scenarios: Scenario[] = [
     description:
       "You redirect grain from livestock feed to human consumption, and the math works on paper.\n\nMeat prices spike, culling starts to look necessary, and everyone remembers too late that a herd takes years to rebuild.",
     choices: [
-      { text: "Import animal feed & meat products from abroad", nextId: "2.2.1.1" },
-      { text: "Aggressively promote plant-based substitution", nextId: "2.2.1.2" },
+      {
+        text: "Import animal feed & meat products from abroad",
+        nextId: "2.2.1.1",
+        description:
+          "Buy feed and meat internationally to keep domestic livestock fed. Preserve herds and the human food supply at the same time.",
+      },
+      {
+        text: "Aggressively promote plant-based substitution",
+        nextId: "2.2.1.2",
+        description:
+          "Launch public campaigns encouraging a shift toward plant-based protein. Shift demand away from meat and ease pressure on feed grain.",
+      },
     ],
   },
   {
@@ -402,8 +548,18 @@ export const scenarios: Scenario[] = [
     description:
       "You redirect crops from biofuel production back to food.\n\nEnergy prices rise in response, and that cost moves through the economy far faster than the food relief does.",
     choices: [
-      { text: "Borrow heavily to fund fuel subsidies", nextId: "2.2.2.1" },
-      { text: "Print money to fund fuel subsidies", nextId: "2.2.2.2" },
+      {
+        text: "Borrow heavily to fund fuel subsidies",
+        nextId: "2.2.2.1",
+        description:
+          "Take on government debt to keep energy prices low. Finance the subsidy through borrowing rather than taxation.",
+      },
+      {
+        text: "Print money to fund fuel subsidies",
+        nextId: "2.2.2.2",
+        description:
+          "Fund the subsidy by expanding the money supply. Cover the cost immediately without raising taxes or issuing debt.",
+      },
     ],
   },
   {

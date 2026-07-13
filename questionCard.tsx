@@ -333,7 +333,7 @@ function ChoiceButton({
       whileHover={{ scale: 1.015 }}
       whileTap={{ scale: 0.985 }}
       aria-pressed={isSelected}
-      className={`group flex w-full items-center gap-4 rounded-xl border px-5 py-4 text-left transition-colors
+      className={`group flex w-full items-start gap-4 rounded-xl border px-5 py-4 text-left transition-colors
                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60
                   ${
                     isSelected
@@ -351,8 +351,15 @@ function ChoiceButton({
       >
         {index + 1}
       </span>
-      <span className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-base text-[#F2EFE9]/90 md:text-lg">
-        {choice.text}
+      <span className="flex flex-col gap-1.5 pt-0.5">
+        <span className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-base text-[#F2EFE9]/90 md:text-lg">
+          {choice.text}
+        </span>
+        {choice.description && (
+          <span className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-xs leading-relaxed text-[#F2EFE9]/50 md:text-[13px]">
+            {choice.description}
+          </span>
+        )}
       </span>
     </motion.button>
   );
