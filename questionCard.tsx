@@ -54,8 +54,6 @@ export default function QuestionCard({
   // awaiting Enter to confirm. Resets whenever the scenario changes.
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  // Guards against the wheel handler firing more than once per landing screen
-  const hasTriggeredScroll = useRef(false);
 
   // NOTE: commitChoice must be declared before any effect that references
   // it (below), since `const` declarations aren't hoisted the way function
@@ -78,7 +76,6 @@ export default function QuestionCard({
         (scenario.isEnding ? " (ENDING)" : "")
     );
     setSelectedIndex(null);
-    hasTriggeredScroll.current = false;
     // Move focus to the card on scenario change so keyboard controls work
     // immediately without the player needing to click first.
     cardRef.current?.focus();
@@ -156,24 +153,12 @@ export default function QuestionCard({
               commitChoice(0);
             }
           }}
-          onScroll={(e) => {
-            // Container is deliberately taller than the viewport (see the
-            // spacer div below), so a genuine scroll gesture — wheel,
-            // trackpad, touch drag, or dragging the scrollbar — actually
-            // moves scrollTop. Once it passes a small threshold, advance.
-            const scrollTop = e.currentTarget.scrollTop;
-            if (scrollTop > 60 && !hasTriggeredScroll.current) {
-              hasTriggeredScroll.current = true;
-              console.log("[QuestionCard] Real scroll detected on landing scenario → advancing");
-              commitChoice(0);
-            }
-          }}
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -60 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="flex h-screen w-full flex-col items-center justify-center
-                     overflow-y-scroll bg-[#14181B] px-6 py-12 text-center outline-none"
+          className="flex min-h-screen w-full flex-col items-center justify-center
+                     bg-[#14181B] px-6 py-12 text-center outline-none"
         >
           <motion.div
             variants={containerVariants}
