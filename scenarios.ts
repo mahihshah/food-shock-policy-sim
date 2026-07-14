@@ -94,7 +94,7 @@ export const scenarios: Scenario[] = [
     description:
       "You are the Minister for Food Security.\n\nYou have one goal: make sure everyone has enough to eat, no matter what.",
     isLanding: true,
-    choices: [{ text: "I'm ready for this", nextId: "0" }],
+    choices: [{ text: "I'm ready", nextId: "0" }],
   },
   
   // ---------------------------------------------------------------------

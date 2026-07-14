@@ -26,6 +26,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import type { Choice, Scenario } from "./scenarios";
 import { caseStudies, type CaseStudy } from "./caseStudies";
+import ResilienceSegue from "./resilienceSegue";
 // If you have a "@/*" path alias set up in tsconfig.json, you can use
 // `import type { Choice, Scenario } from "@/data/scenarios";` instead.
 
@@ -53,18 +54,12 @@ export default function QuestionCard({
   // awaiting Enter to confirm. Resets whenever the scenario changes.
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  // Guards against the wheel handler firing more than once per landing screen
+  const hasTriggeredScroll = useRef(false);
 
-  useEffect(() => {
-    console.log(
-      `[QuestionCard] Rendering scenario "${scenario.id}" — "${scenario.title}"` +
-        (scenario.isEnding ? " (ENDING)" : "")
-    );
-    setSelectedIndex(null);
-    // Move focus to the card on scenario change so keyboard controls work
-    // immediately without the player needing to click first.
-    cardRef.current?.focus();
-  }, [scenario]);
-
+  // NOTE: commitChoice must be declared before any effect that references
+  // it (below), since `const` declarations aren't hoisted the way function
+  // declarations are.
   const commitChoice = useCallback(
     (index: number) => {
       const choice = scenario.choices[index];
@@ -76,6 +71,35 @@ export default function QuestionCard({
     },
     [scenario, onSelectChoice]
   );
+
+  useEffect(() => {
+    console.log(
+      `[QuestionCard] Rendering scenario "${scenario.id}" — "${scenario.title}"` +
+        (scenario.isEnding ? " (ENDING)" : "")
+    );
+    setSelectedIndex(null);
+    hasTriggeredScroll.current = false;
+    // Move focus to the card on scenario change so keyboard controls work
+    // immediately without the player needing to click first.
+    cardRef.current?.focus();
+  }, [scenario]);
+
+  // On landing/role-briefing screens, a deliberate scroll-down gesture
+  // advances to the next screen — same as clicking the button, but matches
+  // the "just scroll" feel the rest of the segue uses. Debounced via
+  // hasTriggeredScroll so a single scroll gesture doesn't fire twice.
+  useEffect(() => {
+    if (!scenario.isLanding) return;
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY > 40 && !hasTriggeredScroll.current) {
+        hasTriggeredScroll.current = true;
+        console.log("[QuestionCard] Scroll-down gesture detected on landing scenario → advancing");
+        commitChoice(0);
+      }
+    };
+    window.addEventListener("wheel", handleWheel, { passive: true });
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, [scenario, commitChoice]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -114,13 +138,14 @@ export default function QuestionCard({
     console.log("[QuestionCard] Restart requested from ending scenario");
     onRestart?.();
   };
- if (scenario.isLanding) {
+
+  if (scenario.isLanding) {
     // Split on blank lines so each paragraph can animate in on its own,
     // staggered. First paragraph becomes the big standout headline; the
     // rest render as smaller body text underneath.
     const [headline, ...bodyParagraphs] = scenario.description.split("\n\n");
 
- const containerVariants: Variants = {
+    const containerVariants: Variants = {
       hidden: {},
       visible: {
         transition: { staggerChildren: 0.4, delayChildren: 0.2 },
@@ -148,10 +173,10 @@ export default function QuestionCard({
               commitChoice(0);
             }
           }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -60 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="flex min-h-screen w-full flex-col items-center justify-center
                      bg-[#14181B] px-6 py-12 text-center outline-none"
         >
@@ -197,6 +222,20 @@ export default function QuestionCard({
                 {scenario.choices[0].text}
               </motion.button>
             </motion.div>
+
+            <motion.div
+              variants={lineVariants}
+              animate={{ opacity: [0.3, 0.8, 0.3], y: [0, 8, 0] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              className="mt-10 flex flex-col items-center gap-1 text-[#F2EFE9]/40"
+            >
+              <span className="font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-widest">
+                Scroll to continue
+              </span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </motion.div>
           </motion.div>
         </motion.div>
       </AnimatePresence>
@@ -204,109 +243,133 @@ export default function QuestionCard({
   }
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={scenario.id}
-        ref={cardRef}
-        tabIndex={0}
-        onKeyDown={handleKeyDown}
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -16 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="relative mx-auto w-full max-w-2xl rounded-2xl border border-white/10
-                   bg-[#1C2226] p-8 shadow-2xl shadow-black/40 outline-none
-                   focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60 md:p-12"
-      >
-        {/* Eyebrow: case-file stamp */}
-        <div className="mb-6 flex items-center justify-between">
-          <span
-            className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs tracking-wide
-                        font-[family-name:'Cabinet_Grotesk',monospace]"
-            style={{
-              borderColor: scenario.isEnding ? "#C1502E66" : "#E8A33D66",
-              color: scenario.isEnding ? "#E8896F" : "#E8A33D",
-            }}
-          >
-            {scenario.isEnding ? "OUTCOME" : "CASE"} {scenario.id}
-          </span>
-          {stepLabel && !scenario.isEnding && (
-            <span className="font-[family-name:'Cabinet_Grotesk',monospace] text-xs text-white/40">
-              {stepLabel}
-            </span>
-          )}
-        </div>
-
-        {/* Title */}
-        <h1
-          className="mb-4 font-[family-name:'Cabinet_Grotesk',sans-serif] text-3xl leading-tight text-[#F2EFE9] md:text-4xl"
+    <>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={scenario.id}
+          ref={cardRef}
+          tabIndex={0}
+          onKeyDown={handleKeyDown}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -16 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="relative mx-auto w-full max-w-2xl rounded-2xl border border-white/10
+                     bg-[#1C2226] p-8 shadow-2xl shadow-black/40 outline-none
+                     focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60 md:p-12"
         >
-          {scenario.title}
-        </h1>
-
-        {/* Description */}
-        <p className="mb-6 font-[family-name:'Cabinet_Grotesk',sans-serif] text-base leading-relaxed text-[#F2EFE9]/80 md:text-lg">
-          {scenario.description}
-        </p>
-
-        {/* Supporting info, if present */}
-        {scenario.supportingInfo && (
-          <div className="mb-8 rounded-lg border border-white/10 bg-white/[0.03] p-4 font-[family-name:'Cabinet_Grotesk',sans-serif] text-sm leading-relaxed text-[#F2EFE9]/60">
-            {scenario.supportingInfo}
-          </div>
-        )}
-
-        {/* Ending state: show outcome, optional restart */}
-        {scenario.isEnding ? (
-          <div className="mt-8">
-            <p className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-xl text-[#E8896F] md:text-2xl">
-              {scenario.outcome}
-            </p>
-            {onRestart && (
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleRestart}
-                className="mt-8 rounded-xl border border-white/15 px-6 py-3 font-[family-name:'Cabinet_Grotesk',sans-serif]
-                           text-sm text-[#F2EFE9]/80 transition-colors hover:border-[#E8A33D]/50 hover:text-[#F2EFE9]
-                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60"
-              >
-                Start over
-              </motion.button>
+          {/* Eyebrow: case-file stamp */}
+          <div className="mb-6 flex items-center justify-between">
+            <span
+              className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs tracking-wide
+                          font-[family-name:'Cabinet_Grotesk',monospace]"
+              style={{
+                borderColor: scenario.isEnding ? "#C1502E66" : "#E8A33D66",
+                color: scenario.isEnding ? "#E8896F" : "#E8A33D",
+              }}
+            >
+              {scenario.isEnding ? "OUTCOME" : "CASE"} {scenario.id}
+            </span>
+            {stepLabel && !scenario.isEnding && (
+              <span className="font-[family-name:'Cabinet_Grotesk',monospace] text-xs text-white/40">
+                {stepLabel}
+              </span>
             )}
           </div>
-        ) : (
-          <div className="mt-8 flex flex-col gap-3">
-            {scenario.choices.map((choice, index) => (
-              <div key={choice.nextId + index} className="relative">
-                <ChoiceButton
-                  choice={choice}
-                  index={index}
-                  isSelected={selectedIndex === index}
-                  onClick={() => handleClick(index)}
-                />
-                <CaseStudyPanel
-                  caseStudy={caseStudies[choice.nextId]}
-                  side={index === 0 ? "left" : "right"}
-                />
-              </div>
-            ))}
-            <AnimatePresence>
-              {selectedIndex !== null && (
-                <motion.p
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="mt-1 font-[family-name:'Cabinet_Grotesk',monospace] text-xs text-white/40"
+
+          {/* Title */}
+          <h1
+            className="mb-4 font-[family-name:'Cabinet_Grotesk',sans-serif] text-3xl leading-tight text-[#F2EFE9] md:text-4xl"
+          >
+            {scenario.title}
+          </h1>
+
+          {/* Description */}
+          <p className="mb-6 font-[family-name:'Cabinet_Grotesk',sans-serif] text-base leading-relaxed text-[#F2EFE9]/80 md:text-lg">
+            {scenario.description}
+          </p>
+
+          {/* Supporting info, if present */}
+          {scenario.supportingInfo && (
+            <div className="mb-8 rounded-lg border border-white/10 bg-white/[0.03] p-4 font-[family-name:'Cabinet_Grotesk',sans-serif] text-sm leading-relaxed text-[#F2EFE9]/60">
+              {scenario.supportingInfo}
+            </div>
+          )}
+
+          {/* Ending state: show outcome, optional restart */}
+          {scenario.isEnding ? (
+            <div className="mt-8">
+              <p className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-xl text-[#E8896F] md:text-2xl">
+                {scenario.outcome}
+              </p>
+              {onRestart && (
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleRestart}
+                  className="mt-8 rounded-xl border border-white/15 px-6 py-3 font-[family-name:'Cabinet_Grotesk',sans-serif]
+                             text-sm text-[#F2EFE9]/80 transition-colors hover:border-[#E8A33D]/50 hover:text-[#F2EFE9]
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60"
                 >
-                  Press Enter to continue
-                </motion.p>
+                  Start over
+                </motion.button>
               )}
-            </AnimatePresence>
-          </div>
-        )}
-      </motion.div>
-    </AnimatePresence>
+
+              <motion.button
+                type="button"
+                onClick={() =>
+                  document.getElementById("resilience-segue")?.scrollIntoView({ behavior: "smooth" })
+                }
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, y: [0, 10, 0] }}
+                transition={{ opacity: { delay: 0.6, duration: 0.6 }, y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}
+                className="mx-auto mt-10 flex flex-col items-center gap-2 text-[#E8A33D]/70 transition-colors hover:text-[#E8A33D]
+                           focus-visible:outline-none"
+                aria-label="Continue to the resilience debrief"
+              >
+                <span className="font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-widest">
+                  Keep scrolling
+                </span>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </motion.button>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-col gap-3">
+              {scenario.choices.map((choice, index) => (
+                <div key={choice.nextId + index} className="relative">
+                  <ChoiceButton
+                    choice={choice}
+                    index={index}
+                    isSelected={selectedIndex === index}
+                    onClick={() => handleClick(index)}
+                  />
+                  <CaseStudyPanel
+                    caseStudy={caseStudies[choice.nextId]}
+                    side={index === 0 ? "left" : "right"}
+                  />
+                </div>
+              ))}
+              <AnimatePresence>
+                {selectedIndex !== null && (
+                  <motion.p
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-1 font-[family-name:'Cabinet_Grotesk',monospace] text-xs text-white/40"
+                  >
+                    Press Enter to continue
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+        </motion.div>
+      </AnimatePresence>
+
+      {scenario.isEnding && <ResilienceSegue onRestart={handleRestart} />}
+    </>
   );
 }
 
