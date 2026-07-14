@@ -62,7 +62,10 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
       </div>
 
       {/* Beat 3: reframe + CTA */}
-      <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 pb-32 text-center">
+      <div
+        id="resilience-beat-3"
+        className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 pb-32 text-center"
+      >
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -147,6 +150,13 @@ function CropLoader() {
         opacity: 0,
         transition: { duration: 0.7, ease: [0.55, 0, 1, 0.45] },
       });
+      if (cancelled) return;
+      // The zoom animation reads as a "transition" moment, so carry the user
+      // straight into beat 3 rather than leaving them stalled mid-scroll —
+      // most people won't intuit that they need to keep scrolling manually
+      // right after a zoom-out effect like this.
+      console.log("[ResilienceSegue] CropLoader sequence complete — auto-scrolling to beat 3");
+      document.getElementById("resilience-beat-3")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     playSequence();
