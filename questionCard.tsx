@@ -157,8 +157,8 @@ export default function QuestionCard({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -60 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="grid h-screen w-full place-items-center overflow-hidden
-                     bg-[#14181B] px-6 py-12 text-center outline-none"
+          className="flex min-h-dvh w-full flex-col items-center justify-center
+                     bg-[#14181B] px-6 py-8 text-center outline-none"
         >
           <motion.div
             variants={containerVariants}
