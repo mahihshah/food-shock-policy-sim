@@ -84,23 +84,6 @@ export default function QuestionCard({
     cardRef.current?.focus();
   }, [scenario]);
 
-  // On landing/role-briefing screens, a deliberate scroll-down gesture
-  // advances to the next screen — same as clicking the button, but matches
-  // the "just scroll" feel the rest of the segue uses. Debounced via
-  // hasTriggeredScroll so a single scroll gesture doesn't fire twice.
-  useEffect(() => {
-    if (!scenario.isLanding) return;
-    const handleWheel = (e: WheelEvent) => {
-      if (e.deltaY > 40 && !hasTriggeredScroll.current) {
-        hasTriggeredScroll.current = true;
-        console.log("[QuestionCard] Scroll-down gesture detected on landing scenario → advancing");
-        commitChoice(0);
-      }
-    };
-    window.addEventListener("wheel", handleWheel, { passive: true });
-    return () => window.removeEventListener("wheel", handleWheel);
-  }, [scenario, commitChoice]);
-
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (scenario.isEnding) return;
@@ -173,12 +156,24 @@ export default function QuestionCard({
               commitChoice(0);
             }
           }}
+          onScroll={(e) => {
+            // Container is deliberately taller than the viewport (see the
+            // spacer div below), so a genuine scroll gesture — wheel,
+            // trackpad, touch drag, or dragging the scrollbar — actually
+            // moves scrollTop. Once it passes a small threshold, advance.
+            const scrollTop = e.currentTarget.scrollTop;
+            if (scrollTop > 60 && !hasTriggeredScroll.current) {
+              hasTriggeredScroll.current = true;
+              console.log("[QuestionCard] Real scroll detected on landing scenario → advancing");
+              commitChoice(0);
+            }
+          }}
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -60 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="flex min-h-screen w-full flex-col items-center justify-center
-                     bg-[#14181B] px-6 py-12 text-center outline-none"
+          className="flex h-screen w-full flex-col items-center justify-center
+                     overflow-y-scroll bg-[#14181B] px-6 py-12 text-center outline-none"
         >
           <motion.div
             variants={containerVariants}
@@ -241,6 +236,11 @@ export default function QuestionCard({
               </svg>
             </motion.button>
           </motion.div>
+
+          {/* Spacer — makes the container taller than one viewport so a real
+              scroll gesture has somewhere to go. Its height, not a wheel
+              delta, is what drives the onScroll threshold above. */}
+          <div className="h-[50vh] w-full shrink-0" aria-hidden="true" />
         </motion.div>
       </AnimatePresence>
     );
