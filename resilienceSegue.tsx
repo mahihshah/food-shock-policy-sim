@@ -19,7 +19,8 @@
 // Once the "ten years before the crisis" mode exists, swap the CTA's
 // onClick for whatever kicks that off instead.
 
-import { motion } from "framer-motion";
+import { motion, useAnimation, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 export interface ResilienceSegueProps {
   onRestart?: () => void;
@@ -55,25 +56,9 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
         ))}
       </div>
 
-      {/* Beat 2: rewind moment */}
+      {/* Beat 2: crop-loader moment */}
       <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <RewindClock />
-        </motion.div>
-        <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.8 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="font-[family-name:'Cabinet_Grotesk',monospace] text-xs uppercase tracking-[0.3em] text-[#E8A33D]/70"
-        >
-          Rewinding…
-        </motion.p>
+        <CropLoader />
       </div>
 
       {/* Beat 3: reframe + CTA */}
@@ -121,41 +106,90 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
 }
 
 // -----------------------------------------------------------------------------
-// Sub-component: rewinding clock
+// Sub-component: crop-icon loader
+//
+// A small grid of crop/food emoji pop in one at a time, each gap shorter
+// than the last (accelerating), then the whole grid zooms out and fades —
+// reading like a quick "recalculating the world" beat. Runs once, the
+// moment this section scrolls into view.
 // -----------------------------------------------------------------------------
 
-function RewindClock() {
+const CROP_ICONS = ["🌾", "🌽", "🍚", "🌱", "🫘", "🍞", "🥔"];
+
+// Accelerating gaps between each icon appearing (seconds) — decreasing, so
+// the loader visibly speeds up as it fills.
+const ICON_GAPS = [0, 0.32, 0.26, 0.21, 0.16, 0.12, 0.09];
+const ICON_DELAYS = ICON_GAPS.reduce<number[]>((acc, gap, i) => {
+  acc.push((acc[i - 1] ?? 0) + gap);
+  return acc;
+}, []);
+
+function CropLoader() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.6 });
+  const gridControls = useAnimation();
+  const zoomControls = useAnimation();
+
+  useEffect(() => {
+    if (!isInView) return;
+    let cancelled = false;
+
+    async function playSequence() {
+      console.log("[ResilienceSegue] CropLoader entering view — playing sequence");
+      await gridControls.start("visible");
+      if (cancelled) return;
+      // Brief hold once the grid is full, then zoom out + fade — total
+      // runtime lands comfortably inside a 3–4s window.
+      await new Promise((resolve) => setTimeout(resolve, 350));
+      if (cancelled) return;
+      await zoomControls.start({
+        scale: 6,
+        opacity: 0,
+        transition: { duration: 0.7, ease: [0.55, 0, 1, 0.45] },
+      });
+    }
+
+    playSequence();
+    return () => {
+      cancelled = true;
+    };
+  }, [isInView, gridControls, zoomControls]);
+
   return (
-    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-      <circle cx="60" cy="60" r="54" stroke="#E8A33D" strokeOpacity="0.3" strokeWidth="2" />
-      <circle cx="60" cy="60" r="2.5" fill="#E8A33D" />
-      {/* minute hand — spins backwards continuously */}
-      <motion.line
-        x1="60"
-        y1="60"
-        x2="60"
-        y2="18"
-        stroke="#E8A33D"
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        style={{ transformOrigin: "60px 60px" }}
-        animate={{ rotate: [0, -360] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-      />
-      {/* hour hand — spins backwards, slower */}
-      <motion.line
-        x1="60"
-        y1="60"
-        x2="60"
-        y2="34"
-        stroke="#F2EFE9"
-        strokeOpacity="0.6"
-        strokeWidth="3"
-        strokeLinecap="round"
-        style={{ transformOrigin: "60px 60px" }}
-        animate={{ rotate: [0, -360] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
-      />
-    </svg>
+    <motion.div ref={ref} animate={zoomControls} className="flex flex-col items-center gap-6">
+      <motion.div
+        initial="hidden"
+        animate={gridControls}
+        className="grid grid-cols-4 gap-3 rounded-2xl border border-[#E8A33D]/25 bg-white/[0.03] p-5"
+      >
+        {CROP_ICONS.map((icon, index) => (
+          <motion.span
+            key={icon + index}
+            custom={index}
+            variants={{
+              hidden: { opacity: 0, scale: 0.4 },
+              visible: (i: number) => ({
+                opacity: 1,
+                scale: 1,
+                transition: { duration: 0.28, delay: ICON_DELAYS[i], ease: [0.22, 1, 0.36, 1] },
+              }),
+            }}
+            className="flex h-14 w-14 items-center justify-center rounded-lg bg-white/[0.04] text-3xl"
+          >
+            {icon}
+          </motion.span>
+        ))}
+        {/* 8th grid cell left empty on purpose — 7 icons in a 4-wide grid
+            reads as "still filling", which suits the loading feel. */}
+      </motion.div>
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={gridControls}
+        variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 1.1, duration: 0.5 } } }}
+        className="font-[family-name:'Cabinet_Grotesk',monospace] text-xs uppercase tracking-[0.3em] text-[#E8A33D]/70"
+      >
+        Recalculating…
+      </motion.p>
+    </motion.div>
   );
 }
