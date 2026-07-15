@@ -21,6 +21,7 @@
 
 import { motion, useAnimation, useInView } from "framer-motion";
 import { useEffect, useRef } from "react";
+import ResilienceCards from "./resilienceCards";
 
 export interface ResilienceSegueProps {
   onRestart?: () => void;
@@ -87,23 +88,27 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
         <motion.button
           type="button"
           onClick={() => {
-            console.log("[ResilienceSegue] Continuing into the resilience phase");
-            onRestart?.();
+            console.log("[ResilienceSegue] Scrolling into resilience options panel");
+            document.getElementById("resilience-cards")?.scrollIntoView({ behavior: "smooth", block: "start" });
           }}
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1, y: [0, 10, 0] }}
           viewport={{ once: true, amount: 0.7 }}
-          transition={{ duration: 0.6, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="mt-2 rounded-full border-2 border-[#E8A33D] bg-[#E8A33D]/10 px-10 py-4
-                     font-[family-name:'Cabinet_Grotesk',sans-serif] text-base font-bold text-[#F2EFE9]
-                     shadow-[0_0_30px_-5px_#E8A33D66] transition-colors hover:bg-[#E8A33D]/25
-                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60 md:text-lg"
+          transition={{ opacity: { delay: 0.5, duration: 0.6 }, y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}
+          className="mt-2 flex flex-col items-center gap-2 text-[#E8A33D]/70 transition-colors hover:text-[#E8A33D]
+                     focus-visible:outline-none"
+          aria-label="Keep scrolling to explore resilience options"
         >
-          Begin the ten-year path
+          <span className="font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-widest">
+            Keep scrolling
+          </span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </motion.button>
       </div>
+
+      <ResilienceCards />
     </section>
   );
 }
