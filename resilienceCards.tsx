@@ -22,7 +22,21 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { resilienceCategories, type ResilienceCategory } from "./resilienceOptions";
+import { resilienceCategories, type ResilienceCategory, type ResilienceItem } from "./resilienceOptions";
+import {
+  Factory, FlaskConical, Timer, Scissors, Leaf, Fuel, Wheat, RefreshCw, Landmark, ShieldCheck,
+  Waves, FileText, Anchor, Package, CloudRain, Droplets, Fish, MapPin, Users, Dna, Unlock,
+  TestTube, Snowflake, Sprout, BookOpen, Radiation, Flame, Recycle, Zap, Gavel, Banknote,
+  ScrollText, Lock, ShoppingCart, Pill, Thermometer, Warehouse, HandCoins, Refrigerator, Home, Sun,
+  type LucideIcon,
+} from "lucide-react";
+
+const resilienceIconMap: Record<string, LucideIcon> = {
+  Factory, FlaskConical, Timer, Scissors, Leaf, Fuel, Wheat, RefreshCw, Landmark, ShieldCheck,
+  Waves, FileText, Anchor, Package, CloudRain, Droplets, Fish, MapPin, Users, Dna, Unlock,
+  TestTube, Snowflake, Sprout, BookOpen, Radiation, Flame, Recycle, Zap, Gavel, Banknote,
+  ScrollText, Lock, ShoppingCart, Pill, Thermometer, Warehouse, HandCoins, Refrigerator, Home, Sun,
+};
 
 const CARD_WIDTH = 260;
 const CARD_GAP = 24;
@@ -240,7 +254,7 @@ function ResilienceCard({
 }
 
 // -----------------------------------------------------------------------------
-// Sub-component: the expanded detail chain for one category
+// Sub-component: scrollytelling detail — one full-height beat per sub-item
 // -----------------------------------------------------------------------------
 
 function ResilienceDetail({
@@ -253,64 +267,32 @@ function ResilienceDetail({
   return (
     <motion.div
       id="resilience-detail"
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="mt-8 w-full max-w-2xl scroll-mt-12"
+      className="w-full scroll-mt-12"
     >
-      <div className="mb-8 text-center">
-        <span className="text-4xl">{category.emoji}</span>
-        <h3 className="mt-2 font-[family-name:'Cabinet_Grotesk',sans-serif] text-2xl font-bold text-[#F2EFE9] md:text-3xl">
+      {/* Category header beat */}
+      <div className="flex min-h-[60vh] w-full flex-col items-center justify-center gap-4 px-6 text-center">
+        <span className="text-5xl">{category.emoji}</span>
+        <h3 className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-3xl font-bold text-[#F2EFE9] md:text-4xl">
           {category.title}
         </h3>
-        <p className="mx-auto mt-2 max-w-md font-[family-name:'Cabinet_Grotesk',sans-serif] text-sm text-[#F2EFE9]/60">
+        <p className="max-w-lg font-[family-name:'Cabinet_Grotesk',sans-serif] text-base text-[#F2EFE9]/60 md:text-lg">
           {category.whatThisMeans}
         </p>
+        <span className="mt-2 font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-widest text-[#E8A33D]/70">
+          Scroll to explore {category.items.length} approaches
+        </span>
       </div>
 
-      {/* Zigzag chain — connecting line down the center, items alternating
-          left/right on md+ screens, stacked in order on mobile. Each item
-          fades/slides in as it scrolls into view. */}
-      <div className="relative">
-        <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-[#E8A33D]/40 via-[#E8A33D]/20 to-transparent md:block" />
-        <div className="flex flex-col gap-8">
-          {category.items.map((item, index) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -24 : 24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.5, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className={`relative flex md:w-1/2 ${
-                index % 2 === 0 ? "md:mr-auto md:pr-8" : "md:ml-auto md:pl-8 md:text-right"
-              }`}
-            >
-              <div
-                className={`w-full rounded-xl border border-white/10 bg-[#1C2226] p-4 ${
-                  index % 2 === 0 ? "" : "md:items-end"
-                }`}
-              >
-                <div
-                  className={`mb-1.5 flex items-center gap-1.5 ${
-                    index % 2 === 0 ? "" : "md:flex-row-reverse"
-                  }`}
-                >
-                  <h4 className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-sm font-bold text-[#F2EFE9]">
-                    {item.title}
-                  </h4>
-                  <InfoTooltip text={item.technical} />
-                </div>
-                <p className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-xs leading-relaxed text-[#F2EFE9]/70">
-                  {item.simple}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+      {/* One full beat per sub-item */}
+      {category.items.map((item, index) => (
+        <ResilienceItemBeat key={item.title} item={item} index={index} />
+      ))}
 
-      <div className="mt-10 flex justify-center">
+      <div className="flex justify-center py-20">
         <button
           type="button"
           onClick={onBack}
@@ -326,30 +308,110 @@ function ResilienceDetail({
 }
 
 // -----------------------------------------------------------------------------
-// Sub-component: (i) tooltip showing the technical explanation
+// Sub-component: one scrolly beat — icons/title, biology intro, economics
+// bullets, and a case study side box. Side box sits sticky next to the text
+// on wide screens (lg:grid-cols-[1fr_280px]) and stacks below on mobile, so
+// nothing feels crowded at any width.
 // -----------------------------------------------------------------------------
 
-function InfoTooltip({ text }: { text: string }) {
+function ResilienceItemBeat({ item, index }: { item: ResilienceItem; index: number }) {
   return (
-    <span className="group/tooltip relative inline-flex items-center">
-      <button
-        type="button"
-        aria-label="More technical explanation"
-        className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-[#E8A33D]/50
-                   text-[9px] text-[#E8A33D]/70 transition-colors hover:border-[#E8A33D] hover:text-[#E8A33D]
-                   focus-visible:border-[#E8A33D] focus-visible:text-[#E8A33D]"
+    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col justify-center gap-8 px-6 py-16">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="flex items-center gap-3"
       >
-        i
-      </button>
-      <span
-        role="tooltip"
-        className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 w-56 -translate-x-1/2 rounded-lg
-                   border border-white/20 bg-[#14181B] p-2.5 text-left text-[11px] leading-snug text-white/80
-                   opacity-0 shadow-xl transition-opacity duration-150
-                   group-hover/tooltip:opacity-100 group-focus-within/tooltip:opacity-100"
+        <div className="flex gap-2">
+          {item.icons.map((iconName) => {
+            const IconComponent = resilienceIconMap[iconName];
+            return IconComponent ? (
+              <span
+                key={iconName}
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#E8A33D]/30 bg-[#E8A33D]/10 text-[#E8A33D]"
+              >
+                <IconComponent size={18} />
+              </span>
+            ) : null;
+          })}
+        </div>
+        <span className="font-[family-name:'Cabinet_Grotesk',monospace] text-xs uppercase tracking-widest text-[#F2EFE9]/40">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+      </motion.div>
+
+      <motion.h4
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 0.5, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+        className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-2xl font-bold text-[#F2EFE9] md:text-3xl"
       >
-        {text}
-      </span>
-    </span>
+        {item.title}
+      </motion.h4>
+
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_280px]">
+        <div className="flex flex-col gap-6">
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-base leading-relaxed text-[#F2EFE9]/85 md:text-lg"
+          >
+            {item.biology}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="rounded-xl border border-white/10 bg-white/[0.03] p-5"
+          >
+            <div className="mb-3 flex items-center gap-2 font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-widest text-[#E8A33D]/70">
+              <Landmark size={13} />
+              The economics
+            </div>
+            <ul className="flex flex-col gap-3">
+              {item.economics.map((point, i) => (
+                <li
+                  key={i}
+                  className="flex gap-2.5 font-[family-name:'Cabinet_Grotesk',sans-serif] text-sm leading-relaxed text-[#F2EFE9]/70"
+                >
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#E8A33D]/60" />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
+
+        <motion.aside
+          initial={{ opacity: 0, x: 16 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="h-fit rounded-xl border border-white/15 bg-[#1C2226] p-4 lg:sticky lg:top-24"
+        >
+          <div className="mb-2 flex items-center gap-1.5 font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-wide text-[#E8A33D]/80">
+            <span>{item.caseStudy.flag}</span>
+            <span>
+              {item.caseStudy.country}, {item.caseStudy.year}
+            </span>
+          </div>
+          <p className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-[13px] leading-snug text-white/85">
+            {item.caseStudy.text}
+          </p>
+          {item.caseStudy.source && (
+            <p className="mt-3 border-t border-white/10 pt-2 font-[family-name:'Cabinet_Grotesk',sans-serif] text-[11px] leading-snug text-white/40">
+              {item.caseStudy.source}
+            </p>
+          )}
+        </motion.aside>
+      </div>
+    </div>
   );
 }
