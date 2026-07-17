@@ -41,6 +41,11 @@ export default function Home() {
 
   const currentScenario = getCurrentScenario(gameState);
 const progressRatio = Math.min(getGameplayDecisionsCount(gameState) / TOTAL_DECISIONS, 1);
+  // Built only once the game has ended — a plain-language trail of every
+  // choice made, in order. Reused later for any "try a different path" nudge.
+  const pathSummary = gameState.isEnded
+    ? gameState.decisions.map((d) => d.choiceText).join(" → ")
+    : undefined;
   // Log a final summary the moment an ending is reached — confirms the
   // whole chain (page → gameLogic → scenarios) is wired correctly end to end.
   useEffect(() => {
@@ -94,6 +99,13 @@ const progressRatio = Math.min(getGameplayDecisionsCount(gameState) / TOTAL_DECI
         stepLabel={gameState.isEnded ? undefined : getStepLabel(gameState)}
         onSelectChoice={handleSelectChoice}
         onRestart={gameState.isEnded ? handleRestart : undefined}
+      />
+      <QuestionCard
+        scenario={currentScenario}
+        stepLabel={gameState.isEnded ? undefined : getStepLabel(gameState)}
+        onSelectChoice={handleSelectChoice}
+        onRestart={gameState.isEnded ? handleRestart : undefined}
+        pathSummary={pathSummary}
       />
 
       {/* While mid-game, offer quieter back/restart controls below the card */}

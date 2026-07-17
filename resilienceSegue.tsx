@@ -29,23 +29,29 @@ export interface ResilienceSegueProps {
 
 const REFLECTION_LINES = [
   "You kept your country afloat.",
-  "But every path came with painful trade-offs.",
-  "There was never a perfect decision…",
-  "…because you were already too late.",
+  "But every intervention came with a side effect you didn't order.",
+  "So why not let the market handle food crises alone? No ceilings, no floors, no bans.",
+  "Because prices alone can't grow more wheat overnight. Past a certain point, an unmanaged market rations by starvation, not by need.",
+  "The more catastrophic the shock, think a multi-year volcanic winter, the less a market can correct itself in time. Someone still has to step in.",
+  "So intervention was never the mistake. Bad sequencing was. The question was never whether to act, but how.",
+  "And in this scenario, you found the how a little too late.",
 ];
 
 export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
   return (
     <section id="resilience-segue" className="mt-32 flex w-full flex-col items-center bg-[#14181B]">
-      {/* Beat 1: reflection lines */}
-      <div className="flex min-h-screen w-full max-w-xl flex-col items-center justify-center gap-6 px-6 text-center">
-        {REFLECTION_LINES.map((line, index) => (
+     {/* Beat 1: reflection lines — one per scroll-height section, revealed
+          individually via whileInView as the reader scrolls past each one */}
+      {REFLECTION_LINES.map((line, index) => (
+        <div
+          key={line}
+          className="flex min-h-[70vh] w-full max-w-xl flex-col items-center justify-center px-6 text-center"
+        >
           <motion.p
-            key={line}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.8 }}
-            transition={{ duration: 0.7, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className={`font-[family-name:'Cabinet_Grotesk',sans-serif] leading-snug text-[#F2EFE9] ${
               index === REFLECTION_LINES.length - 1
                 ? "text-2xl text-[#E8896F] md:text-3xl"
@@ -54,8 +60,8 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
           >
             {line}
           </motion.p>
-        ))}
-      </div>
+        </div>
+      ))}
 
       {/* Beat 2: crop-loader moment */}
       <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 text-center">
@@ -83,7 +89,7 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
           transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-lg font-[family-name:'Cabinet_Grotesk',sans-serif] text-lg text-[#F2EFE9]/70 md:text-xl"
         >
-          This time, you have ten years before the crisis.
+          This time, you have ten years to design the intervention properly.
         </motion.p>
         <motion.button
           type="button"

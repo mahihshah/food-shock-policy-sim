@@ -40,8 +40,10 @@ export interface QuestionCardProps {
   onSelectChoice: (nextId: string) => void;
   /** Optional label shown in the eyebrow area alongside the case number, e.g. "Decision 3" */
   stepLabel?: string;
-  /** Optional callback for a "play again" action on ending scenarios */
+ /** Optional callback for a "play again" action on ending scenarios */
   onRestart?: () => void;
+  /** Only passed on ending scenarios — every choice made this playthrough, joined into one trail */
+  pathSummary?: string;
 }
 
 export default function QuestionCard({
@@ -49,6 +51,7 @@ export default function QuestionCard({
   onSelectChoice,
   stepLabel,
   onRestart,
+  pathSummary,
 }: QuestionCardProps) {
   // Which choice (0 or 1) is currently highlighted via keyboard selection,
   // awaiting Enter to confirm. Resets whenever the scenario changes.
@@ -270,6 +273,11 @@ export default function QuestionCard({
           {/* Ending state: show outcome, optional restart */}
           {scenario.isEnding ? (
             <div className="mt-8">
+              {pathSummary && (
+                <p className="mb-4 font-[family-name:'Cabinet_Grotesk',monospace] text-xs uppercase tracking-wide text-white/40">
+                  Your path: {pathSummary}
+                </p>
+              )}
               <p className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-xl text-[#E8896F] md:text-2xl">
                 {scenario.outcome}
               </p>

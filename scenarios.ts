@@ -57,6 +57,14 @@ export interface Scenario {
   /**
    * Only present on ending scenarios — the final consequence of the path
    * the player took (e.g. "deep recession").
+   *
+   * WRITING RULE: every outcome here validates the player's LAST choice as
+   * economically sound on its own terms, then names the specific mechanism
+   * (deadweight loss, stacked contraction, a policy quietly cancelling an
+   * earlier one, etc.) by which combining it with earlier choices in the
+   * chain still produces a bad result. The point is never "you picked
+   * wrong" — it's "sequencing and compounding effects matter as much as
+   * the individual policy."
    */
   outcome?: string;
   /**
@@ -192,8 +200,9 @@ export const scenarios: Scenario[] = [
     id: "1.1.1.1",
     title: "Increase Taxes to Fund Enforcement",
     description:
-      "You raise taxes to cover the enforcement bill.\n\nConsumption drops, investment stalls, and congratulations, you've bought yourself a recession on top of a food crisis!",
-    outcome: "Deep recession.",
+      "You raise taxes to cover the enforcement bill.\n\nConsumption drops, investment stalls, and the economy tips into recession right as food is already scarce.",
+    outcome:
+      "Funding enforcement through taxes is honest and transparent, a normal way to pay for a public good. The timing is what hurts: raising taxes while an export ban is already making food scarcer and pricier pulls money out of households at the worst possible moment. Stack two contractions on top of each other, and a shortage turns into a recession.",
     isEnding: true,
     choices: [],
   },
@@ -201,8 +210,9 @@ export const scenarios: Scenario[] = [
     id: "1.1.1.2",
     title: "Reduce Government Spending on Other Programs",
     description:
-      "You cut spending elsewhere instead of raising taxes.\n\nThe border holds, but everything else your government used to fund quietly stops holding too. Enjoy your economy's recession!",
-    outcome: "Deep recession.",
+      "You cut spending elsewhere instead of raising taxes.\n\nThe border holds, but everything else your government used to fund quietly stops holding too, and the economy slides into recession alongside the food shock.",
+    outcome:
+      "Cutting other programs instead of raising taxes at least keeps the tax bill unchanged. But withdrawing public spending on top of an already-tightening export ban removes exactly the support households need when prices are climbing. Different route, same destination: a stacked contraction that tips a shortage into a recession.",
     isEnding: true,
     choices: [],
   },
@@ -233,7 +243,8 @@ export const scenarios: Scenario[] = [
     title: "Prioritise Allied Nations",
     description:
       "You allocate the quota by loyalty.\n\nIt buys you goodwill with a few governments and a long memory in the rest.",
-    outcome: "Difficulty managing international affairs.",
+    outcome:
+      "Rewarding allies with quota access is standard diplomacy, and on its own a reasonable way to shore up relationships. But it lands right after a ban and a border crackdown that already looked like hoarding to your trading partners. Add visible favouritism on top of that, and you confirm the suspicion instead of easing it.",
     isEnding: true,
     choices: [],
   },
@@ -242,7 +253,8 @@ export const scenarios: Scenario[] = [
     title: "Allocate Based on Humanitarian Need",
     description:
       "You allocate the quota by need instead of by relationship.\n\nIt's the harder position to defend in a closed-door meeting, and you'll be having a lot of those.",
-    outcome: "Difficulty managing international affairs.",
+    outcome:
+      "Allocating grain by need sends it where it's worth the most, which is good economics as well as good ethics. The problem is timing: it follows a ban and a crackdown that already made you look unreliable. Doing the fair thing late doesn't erase the cost of what you did first, it just adds a second impression to argue with.",
     isEnding: true,
     choices: [],
   },
@@ -295,7 +307,8 @@ export const scenarios: Scenario[] = [
     title: "Introduce Household Purchasing Limits",
     description:
       "You cap how much any household can buy at once.\n\nIt curbs the panic, but the households with the least room to adapt are the ones who feel the cap hardest.",
-    outcome: "The precariat suffers.",
+    outcome:
+      "Capping purchases per household is a normal, sensible way to ration scarce goods fairly across everyone. But it lands on top of vouchers designed specifically to help low-income households, and a flat limit doesn't distinguish between a household stocking up out of anxiety and one that depends on that single trip to eat that week. The safeguard ends up working against the group it was built to protect.",
     isEnding: true,
     choices: [],
   },
@@ -304,7 +317,8 @@ export const scenarios: Scenario[] = [
     title: "Ease Price-Gouging Laws",
     description:
       "You let prices rise freely to discourage stockpiling, especially by eliminating anti-gouging laws.\n\nIt works, in the sense that the people who can no longer afford food have stopped buying it.",
-    outcome: "The precariat suffers.",
+    outcome:
+      "Letting prices rise lets scarcity send an honest signal, and in a healthy market that pulls supply toward wherever it's needed most. But you had just built a voucher scheme specifically to shield low-income households from that exact price signal. Loosen the cap right after, and you quietly cancel the safeguard you'd only just put in place.",
     isEnding: true,
     choices: [],
   },
@@ -334,8 +348,9 @@ export const scenarios: Scenario[] = [
     id: "1.2.2.1",
     title: "Temporary Farmer Income Support",
     description:
-      "You pay farmers directly to offset the cheaper imports.\n\nIt keeps them in business for now, though you're effectively funding both sides of the same market. This is massively inefficient, and it begets what economists call a \"deadweight loss.\"",
-    outcome: "Welfare loss — someone always loses.",
+      "You pay farmers directly to offset the cheaper imports.\n\nIt keeps them in business for now, though you're effectively funding both sides of the same market.",
+    outcome:
+      "Paying farmers directly to stay afloat is a reasonable, common way to protect domestic supply. The catch is you had just cut the tariff that made imports cheaper in the first place, so now you're funding both sides of the very same market. The gap between what farmers need and what imports cost is a deadweight loss: real money spent with no one actually better off for it.",
     isEnding: true,
     choices: [],
   },
@@ -343,8 +358,9 @@ export const scenarios: Scenario[] = [
     id: "1.2.2.2",
     title: "Minimum Support Price / Price Floor",
     description:
-      "You guarantee farmers a floor price the imports can't undercut.\n\nSomeone is still covering that gap, and it isn't the farmers. Spoiler: it's you! Enjoy the insurmountable national debt you're racking up.",
-    outcome: "Welfare loss — someone always loses.",
+      "You guarantee farmers a floor price the imports can't undercut.\n\nSomeone is still covering that gap, and it isn't the farmers.",
+    outcome:
+      "A price floor is a well-established, defensible way to protect farm incomes. But it follows a tariff cut that just made imports cheaper, which means the floor now has to bridge a wider gap than it would have on its own. Someone still covers that difference, and it isn't the farmers. It's the state, and the bill compounds into growing national debt.",
     isEnding: true,
     choices: [],
   },
@@ -422,7 +438,7 @@ export const scenarios: Scenario[] = [
     description:
       "You fortify the staple with iron and vitamins, a cheap and genuinely effective fix.\n\nIt solves the deficiency you can measure, but not quickly enough. This is the oft-neglected problem of \"hidden hunger.\"",
     outcome:
-      "A genuinely good programme — but it treats the symptom, not the underlying problem of \"hidden hunger\" (micronutrient deficiency that isn't visible in calorie counts).",
+      "Fortifying a staple with iron and vitamins is cheap, fast, and one of the best-value tools in public health. But it's patching a gap your own subsidy created by narrowing diets down to a single crop. Fortification treats the deficiency that's already visible in the data. It doesn't restore the dietary variety that would have kept it from happening.",
     isEnding: true,
     choices: [],
   },
@@ -432,7 +448,7 @@ export const scenarios: Scenario[] = [
     description:
       "You expand micronutrient feeding through schools, reaching children while it still matters.\n\nIt's slow to scale beyond them, and the hunger you can't see is still spreading everywhere the programme hasn't reached.",
     outcome:
-      "Difficult to scale quickly, and it likewise only surfaces — without fully solving — the underlying \"hidden hunger\" problem.",
+      "Targeting children through school meals is smart budgeting, since early-life nutrition has the highest long-term payoff of almost any public spending. But it's still responding to a gap your own subsidy created, and a school programme only reaches children who are in school. Everyone else stays exposed to the same shortfall it was meant to fix.",
     isEnding: true,
     choices: [],
   },
@@ -462,8 +478,9 @@ export const scenarios: Scenario[] = [
     id: "2.1.2.1",
     title: "Nationalise Large Farms",
     description:
-      "You take the failing large farms under state control rather than lose them.\n\nOutput stabilises on paper, but every operational decision now runs through people who've never run a farm (including you).",
-    outcome: "Food production becomes inefficient, which can lead to crashes.",
+      "You take the failing large farms under state control rather than lose them.\n\nOutput stabilises on paper, but every operational decision now runs through a state bureaucracy learning how to run a farm from scratch.",
+    outcome:
+      "Keeping large farms running by nationalising them preserves output on paper. But they weren't struggling on their own merits, they were struggling because your subsidy gave smallholders support that large farms never got. Take them over, and you also lose the market-tested management that made them productive in the first place. State administration rarely replaces price signals as efficiently as it replaces ownership.",
     isEnding: true,
     choices: [],
   },
@@ -472,7 +489,8 @@ export const scenarios: Scenario[] = [
     title: "Allow Large Farms to Fail",
     description:
       "You let the large farms close.\n\nThe market corrects itself, and national output takes a hit you don't recover from quickly.",
-    outcome: "Food production becomes inefficient, which can lead to crashes.",
+    outcome:
+      "Letting unprofitable farms close is ordinary market discipline, in theory. In practice, these farms weren't unprofitable on their own; they became so because your subsidy tilted the field toward smallholders. What looks like the market correcting itself is really the market reacting to a distortion your own policy introduced.",
     isEnding: true,
     choices: [],
   },
@@ -526,7 +544,7 @@ export const scenarios: Scenario[] = [
     description:
       "You import feed to keep livestock alive without touching the human food supply.\n\nThe shortfall hasn't gone away, it's just been outsourced, and protein could still run short if the ships stop coming.",
     outcome:
-      "Doesn't solve the core production problem, and may lead to protein deficiency.",
+      "Importing feed to keep herds alive avoids a cull that would take years to recover from, a genuinely good instinct. But it's covering a shortfall your own policy created by diverting domestic grain away from feed in the first place. You haven't closed the protein gap, you've just moved the risk from your fields onto someone else's shipping lanes.",
     isEnding: true,
     choices: [],
   },
@@ -536,7 +554,7 @@ export const scenarios: Scenario[] = [
     description:
       "You push consumption toward plant-based protein instead of importing feed.\n\nIt buys time without solving the shortfall underneath it, and time is the one thing you don't have much of.",
     outcome:
-      "Doesn't solve the core production problem, and may lead to protein deficiency.",
+      "Encouraging plant-based protein is sound long-run economics; consumer demand really does shift given the right incentives. The problem is speed: habits change over years, while the grain diversion that created the protein shortfall took effect immediately. A slow fix for a fast problem still leaves a gap in the meantime.",
     isEnding: true,
     choices: [],
   },
@@ -567,7 +585,8 @@ export const scenarios: Scenario[] = [
     title: "Borrow Heavily to Fund Fuel Subsidies",
     description:
       "You borrow to subsidise fuel and keep energy costs manageable.\n\nThe debt, however, doesn't disappear soon. It just waits for the moment your economy is least prepared to service it.",
-    outcome: "Macro instability.",
+    outcome:
+      "Borrowing to fund the subsidy is, on its own, the more credible option: debt can be repaid on a defined schedule in a way that printed money never really is. But it comes right after stockpile releases and crop diversions that already told markets your reserves were thin. Add debt on top of that signal, and lenders start pricing in the risk that the debt itself becomes the next crisis.",
     isEnding: true,
     choices: [],
   },
@@ -575,8 +594,9 @@ export const scenarios: Scenario[] = [
     id: "2.2.2.2",
     title: "Print Money to Fund Fuel Subsidies",
     description:
-      "You fund the fuel subsidy by printing money, the fastest fix available to you.\n\n(Hyper)inflation follows, and it doesn't care how urgent your reasons were.",
-    outcome: "Macro instability.",
+      "You fund the fuel subsidy by printing money, the fastest fix available to you.\n\n(Hyper)inflation follows, regardless of how urgent the reasons were.",
+    outcome:
+      "Printing money is the fastest way to fund a subsidy, and the least credible. It follows stockpile releases and crop diversions that had already signalled thinning reserves to anyone watching. Expand the money supply on top of that, and you're not just risking inflation, you're confirming exactly what the markets already suspected.",
     isEnding: true,
     choices: [],
   },
