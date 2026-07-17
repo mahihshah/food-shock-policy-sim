@@ -1,46 +1,17 @@
 "use client";
 
 // components/QuestionCard.tsx
-//
-// Displays a single scenario: title, description, supporting info, and its
-// choices (or its outcome, if it's an ending). Fully driven by props — this
-// component never imports scenarios.ts directly, so it works for any
-// scenario without modification.
-//
-// FONT SETUP (assumption — adjust to match your project):
-// This file assumes three font families are available as CSS font-family
-// names: "Fraunces" (display/serif), "Inter" (body/sans), and
-// "IBM Plex Mono" (utility/mono). Easiest way with Next.js is next/font:
-//
-//   import { Fraunces, Inter, IBM_Plex_Mono } from "next/font/google";
-//   const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-display" });
-//   const inter = Inter({ subsets: ["latin"], variable: "--font-body" });
-//   const plexMono = IBM_Plex_Mono({ weight: ["500"], subsets: ["latin"], variable: "--font-mono" });
-//
-// ...then apply the variables' classNames to your root layout <body>, and
-// this component's font-[family-name:...] arbitrary Tailwind values will
-// pick them up. If you haven't set this up yet, the component still works —
-// it'll just fall back to system fonts.
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import type { Choice, Scenario } from "./scenarios";
 import { caseStudies, type CaseStudy } from "./caseStudies";
 import ResilienceSegue from "./resilienceSegue";
-// If you have a "@/*" path alias set up in tsconfig.json, you can use
-// `import type { Choice, Scenario } from "@/data/scenarios";` instead.
 
 export interface QuestionCardProps {
-  /** The scenario to render */
   scenario: Scenario;
-  /**
-   * Called with the id of the next scenario once the player commits to a
-   * choice (via click, or number key + Enter).
-   */
   onSelectChoice: (nextId: string) => void;
-  /** Optional label shown in the eyebrow area alongside the case number, e.g. "Decision 3" */
   stepLabel?: string;
- /** Optional callback for a "play again" action on ending scenarios */
   onRestart?: () => void;
   /** Only passed on ending scenarios — every choice made this playthrough, joined into one trail */
   pathSummary?: string;
@@ -53,14 +24,9 @@ export default function QuestionCard({
   onRestart,
   pathSummary,
 }: QuestionCardProps) {
-  // Which choice (0 or 1) is currently highlighted via keyboard selection,
-  // awaiting Enter to confirm. Resets whenever the scenario changes.
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // NOTE: commitChoice must be declared before any effect that references
-  // it (below), since `const` declarations aren't hoisted the way function
-  // declarations are.
   const commitChoice = useCallback(
     (index: number) => {
       const choice = scenario.choices[index];
@@ -79,32 +45,22 @@ export default function QuestionCard({
         (scenario.isEnding ? " (ENDING)" : "")
     );
     setSelectedIndex(null);
-    // Move focus to the card on scenario change so keyboard controls work
-    // immediately without the player needing to click first.
     cardRef.current?.focus();
   }, [scenario]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (scenario.isEnding) return;
-
-      // Number keys 1 / 2 highlight a choice (does not commit yet)
       if (e.key === "1" || e.key === "2") {
         const index = Number(e.key) - 1;
         if (scenario.choices[index]) {
-          console.log(`[QuestionCard] Key "${e.key}" pressed → highlighting choice ${index + 1}`);
           setSelectedIndex(index);
         }
         return;
       }
-
-      // Enter confirms whichever choice is currently highlighted
       if (e.key === "Enter") {
         if (selectedIndex !== null) {
-          console.log(`[QuestionCard] Enter pressed → confirming choice ${selectedIndex + 1}`);
           commitChoice(selectedIndex);
-        } else {
-          console.log("[QuestionCard] Enter pressed, but no choice is highlighted yet — ignoring");
         }
       }
     },
@@ -112,36 +68,28 @@ export default function QuestionCard({
   );
 
   const handleClick = (index: number) => {
-    console.log(`[QuestionCard] Choice ${index + 1} clicked directly`);
     setSelectedIndex(index);
     commitChoice(index);
   };
 
   const handleRestart = () => {
-    console.log("[QuestionCard] Restart requested from ending scenario");
     onRestart?.();
   };
 
+  // ---------------------------------------------------------------------
+  // LANDING / ROLE SCREENS — centered, exactly one viewport, no scroll.
+  // ---------------------------------------------------------------------
   if (scenario.isLanding) {
-    // Split on blank lines so each paragraph can animate in on its own,
-    // staggered. First paragraph becomes the big standout headline; the
-    // rest render as smaller body text underneath.
     const [headline, ...bodyParagraphs] = scenario.description.split("\n\n");
 
     const containerVariants: Variants = {
       hidden: {},
-      visible: {
-        transition: { staggerChildren: 0.4, delayChildren: 0.2 },
-      },
+      visible: { transition: { staggerChildren: 0.35, delayChildren: 0.15 } },
     };
 
     const lineVariants: Variants = {
       hidden: { opacity: 0, y: 12 },
-      visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-      },
+      visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
     };
 
     return (
@@ -151,17 +99,14 @@ export default function QuestionCard({
           ref={cardRef}
           tabIndex={0}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              console.log("[QuestionCard] Enter pressed on landing scenario → confirming");
-              commitChoice(0);
-            }
+            if (e.key === "Enter") commitChoice(0);
           }}
-          initial={{ opacity: 0, y: 60 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -60 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="flex min-h-dvh w-full flex-col items-center justify-center
-                     bg-[#14181B] px-6 py-8 text-center outline-none"
+          exit={{ opacity: 0, y: -40 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="flex h-dvh w-full flex-col items-center justify-center
+                     overflow-hidden bg-[#14181B] px-6 text-center outline-none"
         >
           <motion.div
             variants={containerVariants}
@@ -182,13 +127,13 @@ export default function QuestionCard({
                 key={index}
                 variants={lineVariants}
                 className="whitespace-pre-line font-[family-name:'Cabinet_Grotesk',sans-serif]
-                           text-lg leading-relaxed text-[#F2EFE9]/80 md:text-2xl"
+                           text-base leading-relaxed text-[#F2EFE9]/80 md:text-xl"
               >
                 {paragraph}
               </motion.p>
             ))}
 
-            <motion.div variants={lineVariants} className="mt-6">
+            <motion.div variants={lineVariants} className="mt-4">
               <motion.button
                 type="button"
                 onClick={() => commitChoice(0)}
@@ -206,16 +151,14 @@ export default function QuestionCard({
               </motion.button>
             </motion.div>
           </motion.div>
-
-          {/* Spacer — makes the container taller than one viewport so a real
-              scroll gesture has somewhere to go. Its height, not a wheel
-              delta, is what drives the onScroll threshold above. */}
-          <div className="h-[50vh] w-full shrink-0" aria-hidden="true" />
         </motion.div>
       </AnimatePresence>
     );
   }
 
+  // ---------------------------------------------------------------------
+  // MAIN SIMULATOR + ENDING CARD — plain mount/unmount, not scrollytelling.
+  // ---------------------------------------------------------------------
   return (
     <>
       <AnimatePresence mode="wait">
@@ -232,45 +175,29 @@ export default function QuestionCard({
                      bg-[#1C2226] p-8 shadow-2xl shadow-black/40 outline-none
                      focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60 md:p-12"
         >
-          {/* Eyebrow: case-file stamp */}
-          <div className="mb-6 flex items-center justify-between">
-            <span
-              className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs tracking-wide
-                          font-[family-name:'Cabinet_Grotesk',monospace]"
-              style={{
-                borderColor: scenario.isEnding ? "#C1502E66" : "#E8A33D66",
-                color: scenario.isEnding ? "#E8896F" : "#E8A33D",
-              }}
-            >
-              {scenario.isEnding ? "OUTCOME" : "CASE"} {scenario.id}
-            </span>
-            {stepLabel && !scenario.isEnding && (
+          {/* Only a "Decision X" tag now — no CASE/OUTCOME id shown to the user */}
+          {stepLabel && !scenario.isEnding && (
+            <div className="mb-6 flex items-center justify-end">
               <span className="font-[family-name:'Cabinet_Grotesk',monospace] text-xs text-white/40">
                 {stepLabel}
               </span>
-            )}
-          </div>
+            </div>
+          )}
 
-          {/* Title */}
-          <h1
-            className="mb-4 font-[family-name:'Cabinet_Grotesk',sans-serif] text-3xl leading-tight text-[#F2EFE9] md:text-4xl"
-          >
+          <h1 className="mb-4 font-[family-name:'Cabinet_Grotesk',sans-serif] text-3xl leading-tight text-[#F2EFE9] md:text-4xl">
             {scenario.title}
           </h1>
 
-          {/* Description */}
           <p className="mb-6 font-[family-name:'Cabinet_Grotesk',sans-serif] text-base leading-relaxed text-[#F2EFE9]/80 md:text-lg">
             {scenario.description}
           </p>
 
-          {/* Supporting info, if present */}
           {scenario.supportingInfo && (
             <div className="mb-8 rounded-lg border border-white/10 bg-white/[0.03] p-4 font-[family-name:'Cabinet_Grotesk',sans-serif] text-sm leading-relaxed text-[#F2EFE9]/60">
               {scenario.supportingInfo}
             </div>
           )}
 
-          {/* Ending state: show outcome, optional restart */}
           {scenario.isEnding ? (
             <div className="mt-8">
               {pathSummary && (
@@ -347,14 +274,13 @@ export default function QuestionCard({
         </motion.div>
       </AnimatePresence>
 
+      {/* Only mounted once, only on the ending scenario. If your duplicate/loop
+          bug persists after this file replaces yours, search your whole project
+          for "<ResilienceSegue" — it must appear in exactly this one spot. */}
       {scenario.isEnding && <ResilienceSegue onRestart={handleRestart} />}
     </>
   );
 }
-
-// -----------------------------------------------------------------------------
-// Sub-component: a single choice button
-// -----------------------------------------------------------------------------
 
 function ChoiceButton({
   choice,
@@ -371,7 +297,6 @@ function ChoiceButton({
     <motion.button
       type="button"
       onClick={onClick}
-      onFocus={() => console.log(`[QuestionCard] Choice ${index + 1} focused: "${choice.text}"`)}
       whileHover={{ scale: 1.015 }}
       whileTap={{ scale: 0.985 }}
       aria-pressed={isSelected}
@@ -407,19 +332,8 @@ function ChoiceButton({
   );
 }
 
-// -----------------------------------------------------------------------------
-// Sub-component: real-world case study shown beside a choice
-// -----------------------------------------------------------------------------
-
-function CaseStudyPanel({
-  caseStudy,
-  side,
-}: {
-  caseStudy?: CaseStudy;
-  side: "left" | "right";
-}) {
+function CaseStudyPanel({ caseStudy, side }: { caseStudy?: CaseStudy; side: "left" | "right" }) {
   if (!caseStudy) return null;
-
   const isLeft = side === "left";
 
   return (
@@ -433,16 +347,12 @@ function CaseStudyPanel({
         transition={{ duration: 0.8, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
         className="pointer-events-auto flex items-center gap-2"
       >
-        {!isLeft && (
-          <span className="shrink-0 text-[#E8A33D]/50">←</span>
-        )}
+        {!isLeft && <span className="shrink-0 text-[#E8A33D]/50">←</span>}
         <div className="rounded-lg border border-white/20 bg-white/[0.06] p-3">
           <div className="mb-1 flex items-center justify-between gap-1.5 font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-wide text-[#E8A33D]/80">
             <span className="flex items-center gap-1.5">
               <span>{caseStudy.flag}</span>
-              <span>
-                {caseStudy.country}, {caseStudy.year}
-              </span>
+              <span>{caseStudy.country}, {caseStudy.year}</span>
             </span>
             {caseStudy.source && (
               <span className="group/tooltip relative flex items-center">

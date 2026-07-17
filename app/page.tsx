@@ -1,15 +1,6 @@
 "use client";
 
 // app/page.tsx
-//
-// The main page. Connects scenarios.ts, gameLogic.ts, and questionCard.tsx —
-// deliberately kept thin: state lives here, but all the rules about how
-// state changes live in gameLogic.ts, and all the rendering of a single
-// scenario lives in questionCard.tsx.
-//
-// PATH ASSUMPTION: this file lives at app/page.tsx, one level below your
-// project root, where scenarios.ts, gameLogic.ts, and questionCard.tsx all
-// live flat (no subfolders). If that changes, update the three imports below.
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -26,11 +17,6 @@ import {
   type GameState,
 } from "../gameLogic";
 
-// Every path through scenarios.ts currently resolves in exactly 4 decisions
-// before reaching an ending (opening → policy → response → action → outcome).
-// This is only used to render the progress bar. If you add branches with a
-// different depth later, update this number (or swap it for a computed
-// max-depth helper in gameLogic.ts).
 const TOTAL_DECISIONS = 4;
 
 export default function Home() {
@@ -40,14 +26,14 @@ export default function Home() {
   });
 
   const currentScenario = getCurrentScenario(gameState);
-const progressRatio = Math.min(getGameplayDecisionsCount(gameState) / TOTAL_DECISIONS, 1);
+  const progressRatio = Math.min(getGameplayDecisionsCount(gameState) / TOTAL_DECISIONS, 1);
+
   // Built only once the game has ended — a plain-language trail of every
   // choice made, in order. Reused later for any "try a different path" nudge.
   const pathSummary = gameState.isEnded
     ? gameState.decisions.map((d) => d.choiceText).join(" → ")
     : undefined;
-  // Log a final summary the moment an ending is reached — confirms the
-  // whole chain (page → gameLogic → scenarios) is wired correctly end to end.
+
   useEffect(() => {
     if (gameState.isEnded) {
       console.log(`[page] Ending reached: "${currentScenario.id}" — "${currentScenario.title}"`);
@@ -70,20 +56,21 @@ const progressRatio = Math.min(getGameplayDecisionsCount(gameState) / TOTAL_DECI
     setGameState((prev) => goToPreviousScenario(prev));
   };
 
+  // Landing + role screens are full-bleed with zero surrounding chrome —
+  // no progress bar, no back/restart row. QuestionCard's own isLanding
+  // branch handles centering with no scroll.
   if (currentScenario.isLanding) {
     return <QuestionCard scenario={currentScenario} onSelectChoice={handleSelectChoice} />;
   }
 
   return (
-<main
+    <main
       className={`flex min-h-screen flex-col items-center bg-[#14181B] px-4 py-12 ${
         gameState.isEnded ? "justify-start pt-16" : "justify-center"
       }`}
-    >      <div className="mb-8 w-full max-w-2xl">
-        <div className="mb-2 flex items-center justify-between font-[family-name:'Cabinet_Grotesk',monospace] text-xs text-white/40">
-          <span>{gameState.isEnded ? "Simulation complete" : getStepLabel(gameState)}</span>
-          <span>{Math.round(progressRatio * 100)}%</span>
-        </div>
+    >
+      {/* Bare progress bar — no label, no percentage, no "Simulation complete" text */}
+      <div className="mb-8 w-full max-w-2xl">
         <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
           <motion.div
             className="h-full rounded-full bg-[#E8A33D]"
@@ -99,16 +86,9 @@ const progressRatio = Math.min(getGameplayDecisionsCount(gameState) / TOTAL_DECI
         stepLabel={gameState.isEnded ? undefined : getStepLabel(gameState)}
         onSelectChoice={handleSelectChoice}
         onRestart={gameState.isEnded ? handleRestart : undefined}
-      />
-      <QuestionCard
-        scenario={currentScenario}
-        stepLabel={gameState.isEnded ? undefined : getStepLabel(gameState)}
-        onSelectChoice={handleSelectChoice}
-        onRestart={gameState.isEnded ? handleRestart : undefined}
         pathSummary={pathSummary}
       />
 
-      {/* While mid-game, offer quieter back/restart controls below the card */}
       {!gameState.isEnded && (
         <div className="mt-6 flex gap-4 font-[family-name:'Inter',sans-serif] text-xs text-white/30">
           {gameState.history.length > 0 && (

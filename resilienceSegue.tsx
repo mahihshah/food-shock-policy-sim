@@ -1,23 +1,6 @@
 "use client";
 
 // components/resilienceSegue.tsx
-//
-// The scrollytelling bridge between "you survived the shock" and the next
-// phase ("this time, you have ten years"). Rendered by QuestionCard directly
-// beneath the final outcome card whenever the current scenario isEnding —
-// it lives in normal document flow, not fixed/absolute, so scrolling down
-// reveals it while the outcome card stays exactly where it was. Nothing
-// above it ever unmounts.
-//
-// STRUCTURE: three full-height "beats", each revealed as it scrolls into
-// view via whileInView (no scroll-hijacking library needed):
-//   1. reflection lines, one at a time
-//   2. a rewind moment (clock spinning backwards)
-//   3. the reframe + CTA button
-//
-// HOOK POINT: `onRestart` currently just restarts the existing simulator.
-// Once the "ten years before the crisis" mode exists, swap the CTA's
-// onClick for whatever kicks that off instead.
 
 import { motion, useAnimation, useInView } from "framer-motion";
 import { useEffect, useRef } from "react";
@@ -27,56 +10,131 @@ export interface ResilienceSegueProps {
   onRestart?: () => void;
 }
 
-const REFLECTION_LINES = [
-  "You kept your country afloat.",
-  "But every intervention came with a side effect you didn't order.",
-  "So why not let the market handle food crises alone? No ceilings, no floors, no bans.",
-  "Because prices alone can't grow more wheat overnight. Past a certain point, an unmanaged market rations by starvation, not by need.",
-  "The more catastrophic the shock, think a multi-year volcanic winter, the less a market can correct itself in time. Someone still has to step in.",
-  "So intervention was never the mistake. Bad sequencing was. The question was never whether to act, but how.",
-  "And in this scenario, you found the how a little too late.",
-];
+function ScrollNudge({ targetId, label = "Keep scrolling" }: { targetId: string; label?: string }) {
+  return (
+    <motion.button
+      type="button"
+      onClick={() => {
+        console.log(`[ResilienceSegue] Scrolling to #${targetId}`);
+        document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1, y: [0, 8, 0] }}
+      viewport={{ once: true, amount: 0.6 }}
+      transition={{ opacity: { delay: 0.3, duration: 0.5 }, y: { duration: 1.6, repeat: Infinity, ease: "easeInOut" } }}
+      className="mt-8 flex flex-col items-center gap-2 text-[#E8A33D]/70 transition-colors hover:text-[#E8A33D]
+                 focus-visible:outline-none"
+      aria-label={label}
+    >
+      <span className="font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-widest">
+        {label}
+      </span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </motion.button>
+  );
+}
 
 export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
   return (
-    <section id="resilience-segue" className="mt-32 flex w-full flex-col items-center bg-[#14181B]">
-     {/* Beat 1: reflection lines — one per scroll-height section, revealed
-          individually via whileInView as the reader scrolls past each one */}
-      {REFLECTION_LINES.map((line, index) => (
-        <div
-          key={line}
-          className="flex min-h-[70vh] w-full max-w-xl flex-col items-center justify-center px-6 text-center"
+    <section id="resilience-segue" className="mt-16 flex w-full flex-col items-center bg-[#14181B]">
+      {/* Group A */}
+      <div
+        id="resilience-group-a"
+        className="flex min-h-[70vh] w-full max-w-xl flex-col items-center justify-center gap-6 px-6 text-center"
+      >
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="text-xl text-[#F2EFE9]/80 font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-2xl"
         >
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.8 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className={`font-[family-name:'Cabinet_Grotesk',sans-serif] leading-snug text-[#F2EFE9] ${
-              index === REFLECTION_LINES.length - 1
-                ? "text-2xl text-[#E8896F] md:text-3xl"
-                : "text-xl text-[#F2EFE9]/80 md:text-2xl"
-            }`}
-          >
-            {line}
-          </motion.p>
-        </div>
-      ))}
-
-      {/* Beat 2: crop-loader moment */}
-      <div className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 text-center">
-        <CropLoader />
+          You kept your country afloat.
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="text-xl text-[#F2EFE9]/80 font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-2xl"
+        >
+          But every intervention came with a side effect you didn&apos;t order.
+        </motion.p>
+        <ScrollNudge targetId="resilience-group-b" />
       </div>
 
-      {/* Beat 3: reframe + CTA */}
+      {/* Group B */}
+      <div
+        id="resilience-group-b"
+        className="flex min-h-[70vh] w-full max-w-xl flex-col items-center justify-center gap-6 px-6 text-center"
+      >
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="text-xl text-[#F2EFE9]/80 font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-2xl"
+        >
+          So why not just get out of the way next time? Let prices alone ration food during the next crisis.
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="text-xl text-[#F2EFE9]/80 font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-2xl"
+        >
+          Tempting. But you can&apos;t price your way into more wheat overnight. Past a point, an unmanaged market rations by who can pay, not who&apos;s hungriest.
+        </motion.p>
+        <ScrollNudge targetId="resilience-group-c" />
+      </div>
+
+      {/* Group C */}
+      <div
+        id="resilience-group-c"
+        className="flex min-h-[70vh] w-full max-w-xl flex-col items-center justify-center gap-6 px-6 text-center"
+      >
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="text-xl text-[#F2EFE9]/80 font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-2xl"
+        >
+          And the worse the shock, imagine a multi-year volcanic winter, the less that market ever corrects itself in time. You&apos;d still have to step in.
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="text-2xl text-[#E8896F] font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-3xl"
+        >
+          So the intervention was never your mistake. The sequencing was. The real question was never whether to act. It&apos;s how.
+        </motion.p>
+        <ScrollNudge targetId="resilience-crop-loader" />
+      </div>
+
+      {/* Crop-loader beat */}
+      <div
+        id="resilience-crop-loader"
+        className="flex min-h-[70vh] w-full flex-col items-center justify-center gap-8 px-6 text-center"
+      >
+        <CropLoader />
+        <ScrollNudge targetId="resilience-beat-3" label="Or skip ahead" />
+      </div>
+
+      {/* Reframe + CTA */}
       <div
         id="resilience-beat-3"
-        className="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 pb-32 text-center"
+        className="flex min-h-[70vh] w-full flex-col items-center justify-center gap-8 px-6 pb-24 text-center"
       >
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.7 }}
+          viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-3xl font-bold text-[#F2EFE9] md:text-5xl"
         >
@@ -85,33 +143,13 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
         <motion.p
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.7 }}
+          viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-lg font-[family-name:'Cabinet_Grotesk',sans-serif] text-lg text-[#F2EFE9]/70 md:text-xl"
         >
           This time, you have ten years to design the intervention properly.
         </motion.p>
-        <motion.button
-          type="button"
-          onClick={() => {
-            console.log("[ResilienceSegue] Scrolling into resilience options panel");
-            document.getElementById("resilience-cards")?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1, y: [0, 10, 0] }}
-          viewport={{ once: true, amount: 0.7 }}
-          transition={{ opacity: { delay: 0.5, duration: 0.6 }, y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}
-          className="mt-2 flex flex-col items-center gap-2 text-[#E8A33D]/70 transition-colors hover:text-[#E8A33D]
-                     focus-visible:outline-none"
-          aria-label="Keep scrolling to explore resilience options"
-        >
-          <span className="font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-widest">
-            Keep scrolling
-          </span>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </motion.button>
+        <ScrollNudge targetId="resilience-cards" label="Keep scrolling" />
       </div>
 
       <ResilienceCards />
@@ -119,19 +157,7 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
   );
 }
 
-// -----------------------------------------------------------------------------
-// Sub-component: crop-icon loader
-//
-// A small grid of crop/food emoji pop in one at a time, each gap shorter
-// than the last (accelerating), then the whole grid zooms out and fades —
-// reading like a quick "recalculating the world" beat. Runs once, the
-// moment this section scrolls into view.
-// -----------------------------------------------------------------------------
-
 const CROP_ICONS = ["🌾", "🌽", "🍚", "🌱", "🫘", "🍞", "🥔"];
-
-// Accelerating gaps between each icon appearing (seconds) — decreasing, so
-// the loader visibly speeds up as it fills.
 const ICON_GAPS = [0, 0.32, 0.26, 0.21, 0.16, 0.12, 0.09];
 const ICON_DELAYS = ICON_GAPS.reduce<number[]>((acc, gap, i) => {
   acc.push((acc[i - 1] ?? 0) + gap);
@@ -140,7 +166,10 @@ const ICON_DELAYS = ICON_GAPS.reduce<number[]>((acc, gap, i) => {
 
 function CropLoader() {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.6 });
+  // once: true is load-bearing — without it, scrolling back up past this
+  // point re-triggers the whole animation AND the auto-scroll-forward call
+  // below, which is exactly what a "looping" scrollytelling section looks like.
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
   const gridControls = useAnimation();
   const zoomControls = useAnimation();
 
@@ -152,8 +181,6 @@ function CropLoader() {
       console.log("[ResilienceSegue] CropLoader entering view — playing sequence");
       await gridControls.start("visible");
       if (cancelled) return;
-      // Brief hold once the grid is full, then zoom out + fade — total
-      // runtime lands comfortably inside a 3–4s window.
       await new Promise((resolve) => setTimeout(resolve, 350));
       if (cancelled) return;
       await zoomControls.start({
@@ -162,10 +189,6 @@ function CropLoader() {
         transition: { duration: 0.7, ease: [0.55, 0, 1, 0.45] },
       });
       if (cancelled) return;
-      // The zoom animation reads as a "transition" moment, so carry the user
-      // straight into beat 3 rather than leaving them stalled mid-scroll —
-      // most people won't intuit that they need to keep scrolling manually
-      // right after a zoom-out effect like this.
       console.log("[ResilienceSegue] CropLoader sequence complete — auto-scrolling to beat 3");
       document.getElementById("resilience-beat-3")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -200,8 +223,6 @@ function CropLoader() {
             {icon}
           </motion.span>
         ))}
-        {/* 8th grid cell left empty on purpose — 7 icons in a 4-wide grid
-            reads as "still filling", which suits the loading feel. */}
       </motion.div>
       <motion.p
         initial={{ opacity: 0 }}
