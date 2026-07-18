@@ -2,12 +2,15 @@
 
 // EconConceptCallout.tsx
 //
-// The small "how economics explains this" box that sits above a corner of
-// the main card, connected to it by a curved dashed arrow. Rendered by
-// QuestionCard for every non-landing scenario, driven by econConcepts.ts.
+// Renders up to two "how economics explains this" boxes flanking the main
+// card: concepts[0] on the right, concepts[1] on the left, each pushed
+// fully outside the card into the page's blank margin space and connected
+// back to the card's corner with a curved dashed arrow.
 //
-// Hidden below `md` — there isn't room for it next to the card on mobile,
-// same call as CaseStudyPanel in QuestionCard.tsx.
+// Uses left-full / right-full (not fixed pixel offsets) so the box always
+// clears the card's edge regardless of card width. Only shows at `xl`
+// breakpoints and up — below that there usually isn't enough margin on
+// either side of the card to fit a 256px box without it clipping.
 
 import { Lora } from "next/font/google";
 import { motion } from "framer-motion";
@@ -19,29 +22,28 @@ const lora = Lora({
   style: ["normal", "italic"],
 });
 
-export function EconConceptCallout({
-  concepts,
-  side = "right",
+function SingleCallout({
+  concept,
+  side,
 }: {
-  concepts: EconConcept[];
-  side?: "left" | "right";
+  concept: EconConcept;
+  side: "left" | "right";
 }) {
-  if (!concepts || concepts.length === 0) return null;
   const isLeft = side === "left";
 
   return (
     <div
-      className={`pointer-events-none absolute -top-28 hidden w-64 md:block
-                  ${isLeft ? "-left-6" : "-right-6"}`}
+      className={`pointer-events-none absolute top-6 hidden w-64 xl:block
+                  ${isLeft ? "right-full mr-10" : "left-full ml-10"}`}
     >
-      {/* Curved dashed arrow: starts at the card's top corner, curves up
-          and out toward the box. Flip horizontally for the left side. */}
+      {/* Curved dashed arrow: starts near the card's top corner, curves
+          out toward the box. Mirrored for the left side. */}
       <svg
-        width="96"
-        height="88"
-        viewBox="0 0 96 88"
+        width="80"
+        height="60"
+        viewBox="0 0 80 60"
         fill="none"
-        className={`absolute -bottom-2 ${isLeft ? "left-0" : "right-0"}`}
+        className={`absolute top-4 ${isLeft ? "-right-9" : "-left-9"}`}
         style={isLeft ? { transform: "scaleX(-1)" } : undefined}
       >
         <defs>
@@ -57,7 +59,7 @@ export function EconConceptCallout({
           </marker>
         </defs>
         <path
-          d="M90 82 C 60 60, 45 30, 10 6"
+          d="M2 4 C 30 4, 50 30, 78 54"
           stroke="#E8A33D"
           strokeOpacity="0.55"
           strokeWidth="1.5"
@@ -75,25 +77,30 @@ export function EconConceptCallout({
         className="pointer-events-auto flex flex-col gap-2 rounded-xl border border-[#E8A33D]/25
                    bg-[#1C2226]/95 p-4 shadow-lg shadow-black/30 backdrop-blur-sm"
       >
-        {concepts.map((concept, i) => (
-          <div
-            key={concept.name}
-            className={i > 0 ? "mt-1 border-t border-white/10 pt-2" : ""}
-          >
-            <span className="mb-0.5 block font-[family-name:'Cabinet_Grotesk',monospace] text-[10px] uppercase tracking-wide text-[#E8A33D]/70">
-              How economics explains this
-            </span>
-            <span
-              className={`${lora.className} block text-[15px] font-semibold italic leading-snug text-[#F2EFE9]`}
-            >
-              {concept.name}
-            </span>
-            <span className="mt-1 block font-[family-name:'Cabinet_Grotesk',sans-serif] text-[12px] leading-relaxed text-[#F2EFE9]/65">
-              {concept.description}
-            </span>
-          </div>
-        ))}
+        <span className="mb-0.5 block font-[family-name:'Cabinet_Grotesk',monospace] text-[10px] uppercase tracking-wide text-[#E8A33D]/70">
+          How economics explains this
+        </span>
+        <span
+          className={`${lora.className} block text-[15px] font-semibold italic leading-snug text-[#F2EFE9]`}
+        >
+          {concept.name}
+        </span>
+        <span className="mt-1 block font-[family-name:'Cabinet_Grotesk',sans-serif] text-[12px] leading-relaxed text-[#F2EFE9]/65">
+          {concept.description}
+        </span>
       </motion.div>
     </div>
+  );
+}
+
+export function EconConceptCallout({ concepts }: { concepts: EconConcept[] }) {
+  if (!concepts || concepts.length === 0) return null;
+  const [first, second] = concepts;
+
+  return (
+    <>
+      {first && <SingleCallout concept={first} side="right" />}
+      {second && <SingleCallout concept={second} side="left" />}
+    </>
   );
 }
