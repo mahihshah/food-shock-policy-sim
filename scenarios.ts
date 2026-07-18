@@ -91,7 +91,7 @@ export const scenarios: Scenario[] = [
     id: "000",
     title: "Landing",
     description:
-      "Could you keep a nation fed?\n\nFood has always seemed plentiful.\nUntil now.\n\nOver the next few minutes, you'll make the same decisions governments face when food suddenly becomes scarce.",
+      "Could you manage a food economy in crisis?\n\nFood has always seemed plentiful.\nUntil now.\n\nOver the next few minutes, you'll make the same decisions governments face when food suddenly becomes scarce.",
     isStart: true,
     isLanding: true,
     choices: [{ text: "Start", nextId: "00" }],
@@ -100,7 +100,7 @@ export const scenarios: Scenario[] = [
     id: "00",
     title: "Role",
     description:
-      "You are the Minister for Food Security.\n\nYour country is middle-income, and like most of the world, it doesn't grow or make everything it needs. You import a share of your key food staples, plus the fertiliser and other agricultural inputs your farmers depend on.\n\nYour one goal: make sure everyone has enough to eat, no matter what.",
+      "You are the Minister for Food Security.\n\nYour country is middle-income, and like most of the world, it doesn't grow or make everything it needs. You import a share of your key food staples, plus the fertiliser and other agricultural inputs your farmers depend on.\n\nMarkets, households and other governments respond to every decision you make.\n\nYour one goal: make sure everyone has enough to eat, no matter what.",
     isLanding: true,
     choices: [{ text: "I'm ready", nextId: "0" }],
   },

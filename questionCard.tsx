@@ -7,6 +7,8 @@ import { AnimatePresence, motion, type Variants } from "framer-motion";
 import type { Choice, Scenario } from "./scenarios";
 import { caseStudies, type CaseStudy } from "./caseStudies";
 import ResilienceSegue from "./resilienceSegue";
+import { econConceptsById } from "./econConcepts";
+import { EconConceptCallout } from "./EconConceptCallout";
 
 export interface QuestionCardProps {
   scenario: Scenario;
@@ -183,6 +185,8 @@ export default function QuestionCard({
                      bg-[#1C2226] p-8 shadow-2xl shadow-black/40 outline-none
                      focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60 md:p-12"
         >
+          <EconConceptCallout concepts={econConceptsById[scenario.id] ?? []} side="right" />
+
           {/* Only a "Decision X" tag now — no CASE/OUTCOME id shown to the user */}
           {stepLabel && !scenario.isEnding && (
             <div className="mb-6 flex items-center justify-end">
