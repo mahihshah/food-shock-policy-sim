@@ -185,8 +185,7 @@ export default function QuestionCard({
                      bg-[#1C2226] p-8 shadow-2xl shadow-black/40 outline-none
                      focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60 md:p-12"
         >
-          <EconConceptCallout concepts={econConceptsById[scenario.id] ?? []} side="right" />
-
+   <EconConceptCallout concepts={econConceptsById[scenario.id] ?? []} />
           {/* Only a "Decision X" tag now — no CASE/OUTCOME id shown to the user */}
           {stepLabel && !scenario.isEnding && (
             <div className="mb-6 flex items-center justify-end">
