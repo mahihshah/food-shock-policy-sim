@@ -10,12 +10,15 @@ import {
   selectChoice,
   restartGame,
   goToPreviousScenario,
+  retryWithAlternateFirstChoice,
   getCurrentScenario,
   getStepLabel,
   getGameplayDecisionsCount,
+  getPathSummary,
   calculatePlaythroughMetrics,
   type GameState,
 } from "../gameLogic";
+import { scenariosById } from "../scenarios";
 
 const TOTAL_DECISIONS = 4;
 
@@ -28,11 +31,24 @@ export default function Home() {
   const currentScenario = getCurrentScenario(gameState);
   const progressRatio = Math.min(getGameplayDecisionsCount(gameState) / TOTAL_DECISIONS, 1);
 
-  // Built only once the game has ended — a plain-language trail of every
-  // choice made, in order. Reused later for any "try a different path" nudge.
-  const pathSummary = gameState.isEnded
-    ? gameState.decisions.map((d) => d.choiceText).join(" → ")
-    : undefined;
+  const pathSummary = gameState.isEnded ? getPathSummary(gameState) : undefined;
+
+  // On the FIRST ending only: offer a forced retry into the root policy the
+  // player didn't pick, and hide "keep scrolling" until that retry is done.
+  const retryInfo =
+    gameState.isEnded && gameState.playCount === 1 && gameState.firstChoiceId
+      ? {
+          originalTitle: scenariosById[gameState.firstChoiceId]?.title ?? "",
+          alternateTitle:
+            scenariosById[gameState.firstChoiceId === "1" ? "2" : "1"]?.title ?? "",
+          onRetry: () => {
+            console.log("[page] Retrying with the alternate first policy");
+            setGameState((prev) => retryWithAlternateFirstChoice(prev));
+          },
+        }
+      : undefined;
+
+  const showKeepScrolling = gameState.playCount >= 2;
 
   useEffect(() => {
     if (gameState.isEnded) {
@@ -87,6 +103,8 @@ export default function Home() {
         onSelectChoice={handleSelectChoice}
         onRestart={gameState.isEnded ? handleRestart : undefined}
         pathSummary={pathSummary}
+        retryInfo={retryInfo}
+        showKeepScrolling={showKeepScrolling}
       />
 
       {!gameState.isEnded && (

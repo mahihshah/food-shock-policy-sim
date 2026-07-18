@@ -15,6 +15,10 @@ export interface QuestionCardProps {
   onRestart?: () => void;
   /** Only passed on ending scenarios — every choice made this playthrough, joined into one trail */
   pathSummary?: string;
+  /** Only passed on the FIRST ending — prompts a forced retry into the other root policy */
+  retryInfo?: { originalTitle: string; alternateTitle: string; onRetry: () => void };
+  /** False until a second (retried) playthrough is complete — hides "keep scrolling" and the resilience segue */
+  showKeepScrolling?: boolean;
 }
 
 export default function QuestionCard({
@@ -23,6 +27,8 @@ export default function QuestionCard({
   stepLabel,
   onRestart,
   pathSummary,
+  retryInfo,
+  showKeepScrolling,
 }: QuestionCardProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -84,12 +90,12 @@ export default function QuestionCard({
 
     const containerVariants: Variants = {
       hidden: {},
-      visible: { transition: { staggerChildren: 0.35, delayChildren: 0.15 } },
+      visible: { transition: { staggerChildren: 0.9, delayChildren: 0.3 } },
     };
 
     const lineVariants: Variants = {
       hidden: { opacity: 0, y: 12 },
-      visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+      visible: { opacity: 1, y: 0, transition: { duration: 1.1, ease: [0.22, 1, 0.36, 1] } },
     };
 
     return (
@@ -201,7 +207,7 @@ export default function QuestionCard({
           {scenario.isEnding ? (
             <div className="mt-8">
               {pathSummary && (
-                <p className="mb-4 font-[family-name:'Cabinet_Grotesk',monospace] text-xs uppercase tracking-wide text-white/40">
+                <p className="mb-4 inline-block rounded-lg border border-white/15 px-3 py-2 font-[family-name:'Cabinet_Grotesk',sans-serif] text-xs italic text-white/50">
                   Your path: {pathSummary}
                 </p>
               )}
@@ -221,25 +227,46 @@ export default function QuestionCard({
                 </motion.button>
               )}
 
-              <motion.button
-                type="button"
-                onClick={() =>
-                  document.getElementById("resilience-segue")?.scrollIntoView({ behavior: "smooth" })
-                }
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1, y: [0, 10, 0] }}
-                transition={{ opacity: { delay: 0.6, duration: 0.6 }, y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}
-                className="mx-auto mt-10 flex flex-col items-center gap-2 text-[#E8A33D]/70 transition-colors hover:text-[#E8A33D]
-                           focus-visible:outline-none"
-                aria-label="Continue to the resilience debrief"
-              >
-                <span className="font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-widest">
-                  Keep scrolling
-                </span>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </motion.button>
+              {retryInfo ? (
+                <motion.button
+                  type="button"
+                  onClick={retryInfo.onRetry}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                  className="mx-auto mt-6 block rounded-xl border-2 border-[#E8A33D] bg-[#E8A33D]/10 px-6 py-3
+                             font-[family-name:'Cabinet_Grotesk',sans-serif] text-sm font-semibold text-[#F2EFE9]
+                             transition-colors hover:bg-[#E8A33D]/20 focus-visible:outline-none
+                             focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60"
+                >
+                  Retry with <strong>{retryInfo.alternateTitle}</strong> instead of{" "}
+                  <strong>{retryInfo.originalTitle}</strong>
+                </motion.button>
+              ) : (
+                showKeepScrolling && (
+                  <motion.button
+                    type="button"
+                    onClick={() =>
+                      document.getElementById("resilience-segue")?.scrollIntoView({ behavior: "smooth" })
+                    }
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1, y: [0, 10, 0] }}
+                    transition={{ opacity: { delay: 0.6, duration: 0.6 }, y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}
+                    className="mx-auto mt-10 flex flex-col items-center gap-2 text-[#E8A33D]/70 transition-colors hover:text-[#E8A33D]
+                               focus-visible:outline-none"
+                    aria-label="Continue to the resilience debrief"
+                  >
+                    <span className="font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-widest">
+                      Keep scrolling
+                    </span>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </motion.button>
+                )
+              )}
             </div>
           ) : (
             <div className="mt-8 flex flex-col gap-3">
@@ -277,7 +304,7 @@ export default function QuestionCard({
       {/* Only mounted once, only on the ending scenario. If your duplicate/loop
           bug persists after this file replaces yours, search your whole project
           for "<ResilienceSegue" — it must appear in exactly this one spot. */}
-      {scenario.isEnding && <ResilienceSegue onRestart={handleRestart} />}
+      {scenario.isEnding && showKeepScrolling && <ResilienceSegue onRestart={handleRestart} />}
     </>
   );
 }

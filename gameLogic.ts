@@ -10,7 +10,7 @@
 // questionCard.tsx). If your layout differs, adjust the import below.
 
 import type { Choice, Scenario } from "./scenarios";
-import { scenarios, scenariosById, startScenario } from "./scenarios";
+import { scenarios, scenariosById, startScenario, choicePastTense } from "./scenarios";
 
 // -----------------------------------------------------------------------------
 // TYPES
@@ -40,6 +40,10 @@ export interface GameState {
   decisions: DecisionRecord[];
   /** True once the player has landed on an ending scenario */
   isEnded: boolean;
+  /** nextId chosen at the very first decision (scenario "0") — "1" or "2" */
+  firstChoiceId: string | null;
+  /** Playthroughs completed this session — starts at 1, becomes 2 after a forced retry */
+  playCount: number;
 }
 
 /** Result of validating the scenario graph in scenarios.ts */
@@ -138,6 +142,8 @@ export function initializeGameState(): GameState {
     history: [],
     decisions: [],
     isEnded: !!startScenario.isEnding,
+    firstChoiceId: null,
+    playCount: 1,
   };
   console.log(`[gameLogic] New game initialized at scenario "${state.currentScenarioId}"`);
   return state;
@@ -235,6 +241,8 @@ export function selectChoice(state: GameState, nextId: string): GameState {
     history: [...state.history, currentScenario.id],
     decisions: [...state.decisions, decision],
     isEnded: !!nextScenario.isEnding,
+    firstChoiceId: currentScenario.id === "0" ? nextId : state.firstChoiceId,
+    playCount: state.playCount,
   };
 
   console.log(
@@ -262,11 +270,65 @@ export function goToPreviousScenario(state: GameState): GameState {
     history: state.history.slice(0, -1),
     decisions: state.decisions.slice(0, -1),
     isEnded: false, // you can only go "back" from a non-ending, or back out of an ending
+    firstChoiceId: state.firstChoiceId,
+    playCount: state.playCount,
   };
 
   console.log(`[gameLogic] Went back to scenario "${previousScenarioId}"`);
   return newState;
 }
+
+// -----------------------------------------------------------------------------
+// FORCED RETRY — jump straight into the branch NOT taken at scenario "0"
+// -----------------------------------------------------------------------------
+
+export function retryWithAlternateFirstChoice(state: GameState): GameState {
+  const rootScenario = scenariosById["0"];
+  const originalId = state.firstChoiceId;
+
+  if (!rootScenario || !originalId) {
+    console.warn("[gameLogic] No recorded first choice to retry against — restarting instead");
+    return restartGame();
+  }
+
+  const alternateChoice = rootScenario.choices.find((c) => c.nextId !== originalId);
+  if (!alternateChoice) {
+    console.error("[gameLogic] Could not find an alternate first choice — restarting instead");
+    return restartGame();
+  }
+
+  const decision: DecisionRecord = {
+    fromScenarioId: "0",
+    choiceText: alternateChoice.text,
+    toScenarioId: alternateChoice.nextId,
+    stepNumber: 1,
+    timestamp: Date.now(),
+  };
+
+  const newState: GameState = {
+    currentScenarioId: alternateChoice.nextId,
+    history: ["0"],
+    decisions: [decision],
+    isEnded: false,
+    firstChoiceId: alternateChoice.nextId,
+    playCount: state.playCount + 1,
+  };
+
+  console.log(`[gameLogic] Retrying with alternate first choice: "${alternateChoice.text}"`);
+  return newState;
+}
+
+// -----------------------------------------------------------------------------
+// PATH SUMMARY — plain-language, past-tense trail for ending screens
+// -----------------------------------------------------------------------------
+
+export function getPathSummary(state: GameState): string {
+  return state.decisions
+    .filter((d) => !scenariosById[d.fromScenarioId]?.isLanding)
+    .map((d) => choicePastTense[d.choiceText] ?? d.choiceText)
+    .join(" → ");
+}
+
 
 // -----------------------------------------------------------------------------
 // METRICS / SCORING

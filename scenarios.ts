@@ -100,7 +100,7 @@ export const scenarios: Scenario[] = [
     id: "00",
     title: "Role",
     description:
-      "You are the Minister for Food Security of a middle-income country.\n\nLike most of the world, you don't grow or make everything you need. You import a share of your key food staples, plus the fertiliser and other agricultural inputs your farmers rely on.\n\nYour one goal: make sure everyone has enough to eat, no matter what.",
+      "You are the Minister for Food Security.\n\nYour country is middle-income, and like most of the world, it doesn't grow or make everything it needs. You import a share of your key food staples, plus the fertiliser and other agricultural inputs your farmers depend on.\n\nYour one goal: make sure everyone has enough to eat, no matter what.",
     isLanding: true,
     choices: [{ text: "I'm ready", nextId: "0" }],
   },
@@ -615,4 +615,41 @@ export const scenariosById: Record<string, Scenario> = Object.fromEntries(
 export const startScenario: Scenario = scenarios.find((s) => s.isStart)!;
 
 /** All terminal scenarios, if you need to e.g. list every possible ending */
-export const endingScenarios: Scenario[] = scenarios.filter((s) => s.isEnding);
+export const endingScenarios: Scenario[] = scenarios.filter((s) => s.isEnding);/**
+ * Past-tense phrasing for each choice, used only in the "Your path" trail on
+ * ending screens. Button labels (Choice.text) stay present-tense — this is
+ * display-only, keyed by the exact Choice.text string.
+ */
+export const choicePastTense: Record<string, string> = {
+  "Impose export controls": "Imposed export controls",
+  "Impose a price ceiling on food": "Imposed a price ceiling on food",
+  "Maintain / intensify the ban": "Maintained / intensified the ban",
+  "Reduce restrictions": "Reduced restrictions",
+  "Increase border enforcement": "Increased border enforcement",
+  "Legalise some exports through a quota system": "Legalised some exports through a quota system",
+  "Increase taxes to fund enforcement": "Increased taxes to fund enforcement",
+  "Reduce government spending on other programs": "Reduced government spending on other programs",
+  "Prioritise allied nations": "Prioritised allied nations",
+  "Allocate based on humanitarian need": "Allocated based on humanitarian need",
+  "Introduce targeted food vouchers": "Introduced targeted food vouchers",
+  "Reduce food import tariffs on one staple food": "Reduced food import tariffs on one staple food",
+  "Introduce household purchasing limits": "Introduced household purchasing limits",
+  "Ease price-gouging laws (letting prices rise further)": "Eased price-gouging laws, letting prices rise further",
+  "Provide temporary farmer income support": "Provided temporary farmer income support",
+  "Set a minimum support price / price floor for farmers": "Set a minimum support price / price floor for farmers",
+  "Pay farmers a subsidy and make direct grain purchases": "Paid farmers a subsidy and made direct grain purchases",
+  "Release national stockpiles": "Released national stockpiles",
+  "Subsidise only one staple crop": "Subsidised only one staple crop",
+  "Subsidise only small farmers": "Subsidised only small farmers",
+  "Mandate wheat fortification with iron & vitamins": "Mandated wheat fortification with iron & vitamins",
+  "Expand school micronutrient feeding programs": "Expanded school micronutrient feeding programs",
+  "Nationalise large farms": "Nationalised large farms",
+  "Allow large farms to fail": "Allowed large farms to fail",
+  "Divert crop use away from animal feed": "Diverted crop use away from animal feed",
+  "Divert crop use away from biofuels": "Diverted crop use away from biofuels",
+  "Import animal feed & meat products from abroad": "Imported animal feed and meat products from abroad",
+  "Aggressively promote plant-based substitution": "Aggressively promoted plant-based substitution",
+  "Borrow heavily to fund fuel subsidies": "Borrowed heavily to fund fuel subsidies",
+  "Print money to fund fuel subsidies": "Printed money to fund fuel subsidies",
+};
+
