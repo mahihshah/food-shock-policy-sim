@@ -128,16 +128,18 @@ export default function QuestionCard({
               {headline}
             </motion.h1>
 
-            {bodyParagraphs.map((paragraph, index) => (
-              <motion.p
-                key={index}
-                variants={lineVariants}
-                className="whitespace-pre-line font-[family-name:'Cabinet_Grotesk',sans-serif]
-                           text-base leading-relaxed text-[#F2EFE9]/80 md:text-xl"
-              >
-                {paragraph}
-              </motion.p>
-            ))}
+            {bodyParagraphs.map((paragraph, pIndex) =>
+              paragraph.split("\n").map((line, lIndex) => (
+                <motion.p
+                  key={`${pIndex}-${lIndex}`}
+                  variants={lineVariants}
+                  className="font-[family-name:'Cabinet_Grotesk',sans-serif]
+                             text-base leading-relaxed text-[#F2EFE9]/80 md:text-xl"
+                >
+                  {line}
+                </motion.p>
+              ))
+            )}
 
             <motion.div variants={lineVariants} className="mt-4">
               <motion.button
@@ -214,19 +216,6 @@ export default function QuestionCard({
               <p className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-xl text-[#E8896F] md:text-2xl">
                 {scenario.outcome}
               </p>
-              {onRestart && (
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleRestart}
-                  className="mt-8 rounded-xl border border-white/15 px-6 py-3 font-[family-name:'Cabinet_Grotesk',sans-serif]
-                             text-sm text-[#F2EFE9]/80 transition-colors hover:border-[#E8A33D]/50 hover:text-[#F2EFE9]
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60"
-                >
-                  Start over
-                </motion.button>
-              )}
-
               {retryInfo ? (
                 <motion.button
                   type="button"

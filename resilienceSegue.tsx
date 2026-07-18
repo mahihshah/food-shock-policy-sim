@@ -83,7 +83,7 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.7, delay: 1.4, ease: [0.22, 1, 0.36, 1] }}
           className="text-xl text-[#F2EFE9]/80 font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-2xl"
         >
           Tempting. But you can&apos;t price your way into more wheat overnight. Past a point, an unmanaged market rations by who can pay, not who&apos;s hungriest.
@@ -109,7 +109,7 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.7, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
           className="text-2xl text-[#E8896F] font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-3xl"
         >
           So the intervention was never your mistake. The sequencing was. The real question was never whether to act. It&apos;s how.
