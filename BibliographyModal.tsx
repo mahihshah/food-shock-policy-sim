@@ -97,7 +97,7 @@ export function BibliographyModal({ isOpen, onClose }: BibliographyModalProps) {
               Bibliography
             </h3>
             <p className="mb-6 font-[family-name:'Cabinet_Grotesk',sans-serif] text-sm text-[#F2EFE9]/50">
-              Every source referenced across the resilience options.
+              Every source referenced across the policy simulation and resilience options.
             </p>
 
             <ol className="flex max-h-[60vh] flex-col gap-4 overflow-y-auto pr-2 font-[family-name:'Cabinet_Grotesk',sans-serif] text-[13px] leading-relaxed text-[#F2EFE9]/70">

@@ -45,7 +45,7 @@ export const econConceptsById: Record<string, EconConcept[]> = {
     {
       name: "Government Failure",
       description:
-        "Interventions meant to fix a market problem can create new ones. Here, the ban cuts legal exports while quietly encouraging illegal ones.",
+        "Interventions meant to fix a market problem can create new ones. Here, the ban cuts legal exports whilst quietly encouraging illegal ones.",
     },
   ],
 
@@ -89,7 +89,7 @@ export const econConceptsById: Record<string, EconConcept[]> = {
       // (my call) reused from screen "1" — same underlying trust dynamic
       name: "Prisoner's Dilemma",
       description:
-        "Trading partners already suspect hoarding, not cooperation, is your default. Visible favouritism plays right into that expectation instead of easing it.",
+        "Trading partners already suspect you're hoarding rather than cooperating. Visible favouritism confirms that expectation instead of easing it.",
     },
   ],
 
@@ -119,7 +119,7 @@ export const econConceptsById: Record<string, EconConcept[]> = {
     {
       name: "Sen's Entitlement Theory",
       description:
-        "Famine often happens not because food disappears, but because people lose the ability to obtain it. Vouchers restore that entitlement even while national supply stays the same.",
+        "Famine often happens not because food disappears, but because people lose the ability to obtain it. Vouchers restore that entitlement even whilst national supply stays the same.",
     },
     {
       name: "Information Asymmetry",
@@ -154,7 +154,7 @@ export const econConceptsById: Record<string, EconConcept[]> = {
     {
       name: "Infant Industry Argument",
       description:
-        "Some industries need temporary protection while they build the scale to compete. Remove that protection too fast, and they can shrink before they've had the chance to adapt.",
+        "Some industries need temporary protection whilst they build the scale to compete. Remove that protection too fast, and they can shrink before they've had the chance to adapt.",
     },
   ],
 
@@ -178,7 +178,7 @@ export const econConceptsById: Record<string, EconConcept[]> = {
     {
       name: "Price Controls",
       description:
-        "When governments set a price below equilibrium, quantity demanded rises while quantity supplied falls. A shortage follows by design of the price itself.",
+        "When governments set a price below equilibrium, quantity demanded rises whilst quantity supplied falls. A shortage follows by design of the price itself.",
     },
     {
       name: "Rationing Mechanisms",
@@ -199,12 +199,12 @@ export const econConceptsById: Record<string, EconConcept[]> = {
     {
       name: "Hidden Hunger",
       description:
-        "Calories and nutrition aren't the same thing. Concentrating support on one staple can raise calorie output while nutritional quality quietly deteriorates.",
+        "Calories and nutrition aren't the same thing. Concentrating support on one staple can raise calorie output whilst nutritional quality quietly deteriorates.",
     },
     {
       name: "Goodhart's Law",
       description:
-        "When a measure becomes a target, it stops being a good measure. Optimising for calories alone makes calorie numbers look better while the underlying diet gets worse.",
+        "When a measure becomes a target, it stops being a good measure. Optimising for calories alone makes calorie numbers look better whilst the underlying diet gets worse.",
     },
   ],
 
@@ -212,7 +212,7 @@ export const econConceptsById: Record<string, EconConcept[]> = {
     {
       name: "Hidden Hunger",
       description:
-        "Fortification treats the deficiency that's already visible in the data. It doesn't restore the dietary variety that would have prevented it in the first place.",
+        "Fortification patches the deficiency that's already visible in the data, but the dietary variety that would have prevented it stays missing.",
     },
   ],
 
@@ -249,7 +249,7 @@ export const econConceptsById: Record<string, EconConcept[]> = {
     {
       name: "Economies of Scale",
       description:
-        "What looks like ordinary market discipline is really the market reacting to a distortion introduced upstream, not a natural correction on its own.",
+        "What looks like ordinary market discipline is really the market reacting to a distortion your policy introduced earlier.",
     },
   ],
 
@@ -275,7 +275,7 @@ export const econConceptsById: Record<string, EconConcept[]> = {
       // (my call)
       name: "Comparative Advantage & Gains from Trade",
       description:
-        "Importing feed lets you keep relying on trade for what's now scarce domestically. It doesn't close the gap, it just moves the exposure onto someone else's supply chain.",
+        "Importing feed lets you keep relying on trade for what's now scarce domestically, shifting the exposure onto someone else's supply chain rather than actually closing the gap.",
     },
   ],
 
@@ -284,7 +284,7 @@ export const econConceptsById: Record<string, EconConcept[]> = {
       // (my call)
       name: "Production Possibility Frontier (PPF)",
       description:
-        "Shifting demand toward plant protein is a real long-run solution, but consumer habits move slowly along that frontier while the shortfall it's meant to fix happened immediately.",
+        "Shifting demand toward plant protein is a real long-run solution, but consumer habits move slowly along that frontier whilst the shortfall it's meant to fix happened immediately.",
     },
   ],
 

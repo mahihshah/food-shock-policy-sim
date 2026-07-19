@@ -9,7 +9,12 @@ import { caseStudies, type CaseStudy } from "./caseStudies";
 import ResilienceSegue from "./resilienceSegue";
 import { econConceptsById } from "./econConcepts";
 import { EconConceptCallout } from "./EconConceptCallout";
+import { JetBrains_Mono } from "next/font/google";
 
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+});
 export interface QuestionCardProps {
   scenario: Scenario;
   onSelectChoice: (nextId: string) => void;
@@ -368,36 +373,39 @@ function CaseStudyPanel({ caseStudy, side }: { caseStudy?: CaseStudy; side: "lef
       >
         {!isLeft && <span className="shrink-0 text-[#E8A33D]/50">←</span>}
         <div className="rounded-lg border border-white/20 bg-white/[0.06] p-3">
-          <div className="mb-1 flex items-center justify-between gap-1.5 font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-wide text-[#E8A33D]/80">
-            <span className="flex items-center gap-1.5">
-              <span>{caseStudy.flag}</span>
-              <span>{caseStudy.country}, {caseStudy.year}</span>
-            </span>
+          <span
+            className={`${jetbrainsMono.className} mb-1.5 block text-[9px] font-bold uppercase tracking-[0.18em] text-[#6FCF97]`}
+          >
+            This actually happened
+          </span>
+          <div className="mb-1 flex items-center gap-1.5 font-[family-name:'Cabinet_Grotesk',monospace] text-[11px] uppercase tracking-wide text-[#E8A33D]/80">
+            <span>{caseStudy.flag}</span>
+            <span>{caseStudy.country}, {caseStudy.year}</span>
+          </div>
+          <p className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-[13px] leading-snug text-white">
+            {caseStudy.text}
             {caseStudy.source && (
-              <span className="group/tooltip relative flex items-center">
+              <sup className="group/tooltip relative ml-0.5 inline-block">
                 <button
                   type="button"
-                  aria-label="View reference"
-                  className="flex h-4 w-4 items-center justify-center rounded-full border border-[#E8A33D]/50 text-[9px] normal-case text-[#E8A33D]/70 transition-colors hover:border-[#E8A33D] hover:text-[#E8A33D] focus-visible:border-[#E8A33D] focus-visible:text-[#E8A33D]"
+                  aria-label="View source"
+                  className="cursor-help align-super text-[11px] font-bold text-[#6FCF97] transition-colors hover:text-[#8FE0B3] focus-visible:text-[#8FE0B3]"
                 >
-                  i
+                  *
                 </button>
                 <span
                   role="tooltip"
-                  className="pointer-events-none absolute bottom-full right-0 z-50 mb-2 max-h-64 w-64 overflow-y-auto rounded-lg border border-white/20 bg-[#14181B] p-2.5 text-left normal-case tracking-normal opacity-0 shadow-xl transition-opacity duration-150 group-hover/tooltip:opacity-100 group-focus-within/tooltip:opacity-100"
+                  className="pointer-events-none absolute bottom-full right-0 z-50 mb-2 max-h-64 w-64 overflow-y-auto rounded-lg border border-white/20 bg-[#14181B] p-2.5 text-left normal-case leading-snug tracking-normal opacity-0 shadow-xl transition-opacity duration-150 group-hover/tooltip:opacity-100 group-focus-within/tooltip:opacity-100"
                 >
-                  <span className="mb-1 block font-[family-name:'Cabinet_Grotesk',monospace] text-[10px] uppercase tracking-wide text-[#E8A33D]/70">
-                    Reference
+                  <span className="mb-1 block font-[family-name:'Cabinet_Grotesk',monospace] text-[10px] uppercase tracking-wide text-[#6FCF97]/80">
+                    Source
                   </span>
                   <span className="block whitespace-pre-line text-[11px] leading-snug text-white/80">
                     {caseStudy.source}
                   </span>
                 </span>
-              </span>
+              </sup>
             )}
-          </div>
-          <p className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-[13px] leading-snug text-white">
-            {caseStudy.text}
           </p>
         </div>
         {isLeft && <span className="shrink-0 text-[#E8A33D]/50">→</span>}

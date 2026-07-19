@@ -112,7 +112,7 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
           transition={{ duration: 0.7, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
           className="text-2xl text-[#E8896F] font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-3xl"
         >
-          So the intervention was never your mistake. The sequencing was. The real question was never whether to act. It&apos;s how.
+          Turns out it was the sequencing that sank you, not the intervention itself. You were never wrong to act. You just hadn&apos;t worked out how yet.
         </motion.p>
         <ScrollNudge targetId="resilience-crop-loader" />
       </div>

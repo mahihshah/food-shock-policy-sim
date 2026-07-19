@@ -32,8 +32,8 @@ function SingleCallout({
   const isLeft = side === "left";
 
   return (
-    <div
-      className={`pointer-events-none absolute top-6 hidden w-64 xl:block
+      <div
+      className={`pointer-events-none absolute top-6 hidden w-80 xl:block
                   ${isLeft ? "right-full mr-10" : "left-full ml-10"}`}
     >
       {/* Curved dashed arrow: starts near the card's top corner, curves
@@ -85,7 +85,7 @@ function SingleCallout({
         >
           {concept.name}
         </span>
-        <span className="mt-1 block font-[family-name:'Cabinet_Grotesk',sans-serif] text-[12px] leading-relaxed text-[#F2EFE9]/65">
+        <span className="mt-1 block max-h-[190px] overflow-y-auto font-[family-name:'Cabinet_Grotesk',sans-serif] text-[12px] leading-snug text-[#F2EFE9]/65">
           {concept.description}
         </span>
       </motion.div>
