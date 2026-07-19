@@ -110,8 +110,8 @@ export default function ResilienceCards() {
         <h2 className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-2xl font-bold text-[#F2EFE9] md:text-3xl">
           Seven ways to build resilience before the next shock
         </h2>
-        <p className="mt-3 font-[family-name:'Cabinet_Grotesk',sans-serif] text-sm text-[#F2EFE9]/60 md:text-base">
-          Browse with the arrows, the keyboard, or by hovering a card. Pick one to explore it in depth.
+             <p className="mt-3 font-[family-name:'Cabinet_Grotesk',sans-serif] text-sm text-[#F2EFE9]/60 md:text-base">
+          Browse with the arrows, the keyboard, or by hovering a card. Pick one, <em className="text-[#F2EFE9]/85 not-italic italic">or more</em>, to explore in depth.
         </p>
       </div>
 
@@ -257,15 +257,26 @@ function ResilienceCard({
         {category.whatThisMeans}
       </p>
 
-      <button
+      <motion.button
         type="button"
         onClick={onExplore}
+        animate={{
+          scale: [1, 1.04, 1],
+          boxShadow: [
+            "0 0 0px 0px #E8A33D00",
+            "0 0 18px 2px #E8A33D55",
+            "0 0 0px 0px #E8A33D00",
+          ],
+        }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.95 }}
         className="w-full rounded-lg border border-[#E8A33D]/40 py-2 font-[family-name:'Cabinet_Grotesk',sans-serif]
                    text-xs font-semibold text-[#E8A33D] transition-colors hover:border-[#E8A33D] hover:bg-[#E8A33D]/10
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8A33D]/60"
       >
         Explore this →
-      </button>
+      </motion.button>
     </motion.div>
   );
 }

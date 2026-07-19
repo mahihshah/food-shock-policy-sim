@@ -10,6 +10,13 @@ export interface ResilienceSegueProps {
   onRestart?: () => void;
 }
 
+// Shared, slightly gentler easing + trigger point used across every beat so
+// the whole section reads as one smooth motion instead of separately-tuned
+// pieces. Triggering at a lower `amount` means elements start animating
+// before they're fully centred in view, which feels less like a jump-cut.
+const EASE = [0.16, 1, 0.3, 1] as const;
+const VIEWPORT = { once: true, amount: 0.3 };
+
 function ScrollNudge({ targetId, label = "Keep scrolling" }: { targetId: string; label?: string }) {
   return (
     <motion.button
@@ -20,8 +27,8 @@ function ScrollNudge({ targetId, label = "Keep scrolling" }: { targetId: string;
       }}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1, y: [0, 8, 0] }}
-      viewport={{ once: true, amount: 0.6 }}
-      transition={{ opacity: { delay: 0.3, duration: 0.5 }, y: { duration: 1.6, repeat: Infinity, ease: "easeInOut" } }}
+      viewport={{ once: true, amount: 0.5 }}
+      transition={{ opacity: { delay: 0.3, duration: 0.6 }, y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}
       className="mt-8 flex flex-col items-center gap-2 text-[#E8A33D]/70 transition-colors hover:text-[#E8A33D]
                  focus-visible:outline-none"
       aria-label={label}
@@ -42,13 +49,13 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
       {/* Group A */}
       <div
         id="resilience-group-a"
-        className="flex min-h-[70vh] w-full max-w-xl flex-col items-center justify-center gap-6 px-6 text-center"
+        className="flex min-h-screen w-full max-w-xl snap-start flex-col items-center justify-center gap-6 px-6 text-center"
       >
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.7, ease: EASE }}
           className="text-xl text-[#F2EFE9]/80 font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-2xl"
         >
           You kept your country afloat.
@@ -56,8 +63,8 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.7, delay: 0.15, ease: EASE }}
           className="text-xl text-[#F2EFE9]/80 font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-2xl"
         >
           But every intervention came with a side effect you didn&apos;t order.
@@ -68,13 +75,13 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
       {/* Group B */}
       <div
         id="resilience-group-b"
-        className="flex min-h-[70vh] w-full max-w-xl flex-col items-center justify-center gap-6 px-6 text-center"
+        className="flex min-h-screen w-full max-w-xl snap-start flex-col items-center justify-center gap-6 px-6 text-center"
       >
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.7, ease: EASE }}
           className="text-xl text-[#F2EFE9]/80 font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-2xl"
         >
           So why not just get out of the way next time? Let prices alone ration food during the next crisis.
@@ -82,8 +89,8 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.7, delay: 1.4, ease: [0.22, 1, 0.36, 1] }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.8, delay: 1.4, ease: EASE }}
           className="text-xl text-[#F2EFE9]/80 font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-2xl"
         >
           Tempting. But you can&apos;t price your way into more wheat overnight. Past a point, an unmanaged market rations by who can pay, not who&apos;s hungriest.
@@ -94,48 +101,83 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
       {/* Group C */}
       <div
         id="resilience-group-c"
-        className="flex min-h-[70vh] w-full max-w-xl flex-col items-center justify-center gap-6 px-6 text-center"
+        className="flex min-h-screen w-full max-w-xl snap-start flex-col items-center justify-center gap-4 px-6 text-center"
       >
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.7, ease: EASE }}
           className="text-xl text-[#F2EFE9]/80 font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-2xl"
         >
-          And the worse the shock, imagine a multi-year volcanic winter, the less that market ever corrects itself in time. You&apos;d still have to step in.
+          And the worse the shock (a nuclear winter, a supervolcano eruption, a stray asteroid… oh my!), the less that market ever corrects itself in time. You&apos;d still have to step in.
         </motion.p>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={VIEWPORT}
+          transition={{ delay: 0.6, duration: 0.6 }}
+          className="flex items-center gap-1.5 font-[family-name:'Cabinet_Grotesk',monospace] text-xs italic text-[#E8A33D]/60"
+        >
+          <span>↖</span>
+          <span>yes, these could all actually happen</span>
+        </motion.div>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.7, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.8, delay: 1.4, ease: EASE }}
           className="text-2xl text-[#E8896F] font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-3xl"
         >
           Turns out it was the sequencing that sank you, not the intervention itself. You were never wrong to act. You just hadn&apos;t worked out how yet.
         </motion.p>
+        <ScrollNudge targetId="resilience-group-d" />
+      </div>
+
+      {/* Group D — the aha moment before the rewind */}
+      <div
+        id="resilience-group-d"
+        className="flex min-h-screen w-full max-w-xl snap-start flex-col items-center justify-center gap-6 px-6 text-center"
+      >
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.7, ease: EASE }}
+          className="text-xl text-[#F2EFE9]/80 font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-2xl"
+        >
+          Here&apos;s the thing though: none of this has actually happened. Not yet.
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.8, delay: 1.2, ease: EASE }}
+          className="text-2xl text-[#E8896F] font-[family-name:'Cabinet_Grotesk',sans-serif] md:text-3xl"
+        >
+          In the real world, we might still have time. (Hopefully.) What if you did too?
+        </motion.p>
         <ScrollNudge targetId="resilience-crop-loader" />
       </div>
 
-      {/* Crop-loader beat */}
+      {/* Crop-loader beat — plays uninterrupted, then auto-advances itself */}
       <div
         id="resilience-crop-loader"
-        className="flex min-h-[70vh] w-full flex-col items-center justify-center gap-8 px-6 text-center"
+        className="flex min-h-screen w-full snap-start flex-col items-center justify-center gap-8 px-6 text-center"
       >
         <CropLoader />
-        <ScrollNudge targetId="resilience-beat-3" label="Or skip ahead" />
       </div>
 
       {/* Reframe + CTA */}
       <div
         id="resilience-beat-3"
-        className="flex min-h-[70vh] w-full flex-col items-center justify-center gap-8 px-6 pb-24 text-center"
+        className="flex min-h-screen w-full snap-start flex-col items-center justify-center gap-8 px-6 pb-24 text-center"
       >
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, ease: EASE }}
           className="font-[family-name:'Cabinet_Grotesk',sans-serif] text-3xl font-bold text-[#F2EFE9] md:text-5xl"
         >
           Let&apos;s try again.
@@ -144,7 +186,7 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
           className="max-w-lg font-[family-name:'Cabinet_Grotesk',sans-serif] text-lg text-[#F2EFE9]/70 md:text-xl"
         >
           This time, you have ten years to design the intervention properly.

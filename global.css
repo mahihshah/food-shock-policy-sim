@@ -33,6 +33,7 @@ html {
   scroll-behavior: smooth;
   scrollbar-color: var(--color-accent) var(--color-background);
   scrollbar-width: thin;
+  scroll-snap-type: y proximity;
 }
 
 body {
