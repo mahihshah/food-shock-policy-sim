@@ -23,6 +23,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { resilienceCategories, type ResilienceCategory, type ResilienceItem } from "./resilienceOptions";
+import { BibliographyModal } from "./BibliographyModal";
 import {
   Factory, FlaskConical, Timer, Scissors, Leaf, Fuel, Wheat, RefreshCw, Landmark, ShieldCheck,
   Waves, FileText, Anchor, Package, CloudRain, Droplets, Fish, MapPin, Users, Dna, Unlock,
@@ -45,6 +46,7 @@ const STEP = CARD_WIDTH + CARD_GAP;
 export default function ResilienceCards() {
   const [focusedIndex, setFocusedIndex] = useState(0);
   const [exploringId, setExploringId] = useState<string | null>(null);
+  const [bibliographyOpen, setBibliographyOpen] = useState(false);
 
   const trackContainerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -182,6 +184,21 @@ export default function ResilienceCards() {
           />
         )}
       </AnimatePresence>
+
+            <button
+        type="button"
+        onClick={() => setBibliographyOpen(true)}
+        className="mt-10 mb-4 flex items-center gap-2 rounded-xl border border-white/15 bg-white/[0.03]
+                   px-6 py-3 font-[family-name:'Cabinet_Grotesk',sans-serif] text-sm font-medium
+                   text-[#F2EFE9]/85 transition-colors hover:border-[#E8A33D]/50 hover:bg-[#E8A33D]/10
+                   hover:text-[#E8A33D] focus-visible:outline-none focus-visible:ring-2
+                   focus-visible:ring-[#E8A33D]/60"
+      >
+        <BookOpen size={16} />
+        View full bibliography
+      </button>
+
+      <BibliographyModal isOpen={bibliographyOpen} onClose={() => setBibliographyOpen(false)} />
     </section>
   );
 }
