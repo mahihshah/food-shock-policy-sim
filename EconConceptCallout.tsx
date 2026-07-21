@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { EconConcept } from "./econConcepts";
-import { renderHighlighted } from "./lib/highlights";
+import { renderHighlighted } from "./lib/highlight";
 
 function SingleCallout({ concept, side }: { concept: EconConcept; side: "left" | "right" }) {
   const isLeft = side === "left";
@@ -17,11 +17,25 @@ function SingleCallout({ concept, side }: { concept: EconConcept; side: "left" |
             <path d="M0,0 L7,3.5 L0,7 Z" fill="var(--color-accent)" />
           </marker>
         </defs>
-        <path d="M2 4 C 30 4, 50 30, 78 54" stroke="var(--color-accent)" strokeOpacity="0.55" strokeWidth="1.5"
-          strokeDasharray="4 4" strokeLinecap="round" fill="none" markerEnd={`url(#econ-arrowhead-${side})`} />
+        <motion.path
+          d="M2 4 C 30 4, 50 30, 78 54"
+          stroke="var(--color-accent)"
+          strokeOpacity="0.6"
+          strokeWidth="1.5"
+          strokeDasharray="4 4"
+          strokeLinecap="round"
+          fill="none"
+          markerEnd={`url(#econ-arrowhead-${side})`}
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        />
       </svg>
 
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 1.4, ease: [0.22, 1, 0.36, 1] }}
         className="pointer-events-auto flex flex-col gap-2 rounded-xl border border-[var(--color-accent)]/25
                    bg-[var(--color-surface)]/95 p-4 shadow-lg shadow-black/30 backdrop-blur-sm">
         <span className="mb-0.5 block font-[family-name:var(--font-body)] text-[10px] font-semibold uppercase tracking-wide text-[var(--color-accent)]/70">

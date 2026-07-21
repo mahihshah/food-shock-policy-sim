@@ -8,7 +8,7 @@ import ResilienceSegue from "./resilienceSegue";
 import { econConceptsById } from "./econConcepts";
 import { EconConceptCallout } from "./EconConceptCallout";
 import { SourceTag } from "./SourceTag";
-import { renderHighlighted } from "./lib/highlights";
+import { renderHighlighted } from "./lib/highlight";
 
 export interface QuestionCardProps {
   scenario: Scenario;
@@ -107,7 +107,7 @@ export default function QuestionCard({
           key={scenario.id} ref={cardRef} tabIndex={0} onKeyDown={handleKeyDown}
           initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto w-full max-w-2xl rounded-2xl border border-[var(--color-border)]
+          className="relative mx-auto w-full max-w-2xl rounded-2xl border border-[var(--color-border)] border-t-2 border-t-[var(--color-accent)]
                      bg-[var(--color-surface)] p-8 shadow-2xl shadow-black/40 outline-none
                      focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]/60 md:p-12"
         >
@@ -143,7 +143,7 @@ export default function QuestionCard({
                 </p>
               )}
               <p className="font-[family-name:var(--font-body)] text-xl text-[var(--color-danger)] md:text-2xl">
-                {scenario.outcome}
+                {renderHighlighted(scenario.outcome ?? "")}
               </p>
               {retryInfo ? (
                 <motion.button type="button" onClick={retryInfo.onRetry}
@@ -204,10 +204,15 @@ function ChoiceButton({ choice, index, isSelected, onClick }: {
   choice: Choice; index: number; isSelected: boolean; onClick: () => void;
 }) {
   return (
-    <motion.button type="button" onClick={onClick} whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.985 }} aria-pressed={isSelected}
+    <motion.button type="button" onClick={onClick}
+      whileHover={{ scale: 1.02, backgroundColor: "color-mix(in srgb, var(--color-accent) 12%, transparent)" }}
+      whileTap={{ scale: 0.98 }}
+      aria-pressed={isSelected}
       className={`group flex w-full items-start gap-4 rounded-xl border px-5 py-4 text-left transition-colors
                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]/60
-                  ${isSelected ? "border-[var(--color-accent)] bg-[var(--color-accent)]/10" : "border-[var(--color-border)] bg-[var(--color-foreground)]/[0.02] hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-foreground)]/[0.05]"}`}>
+                  ${isSelected
+                    ? "border-[var(--color-accent)] bg-[var(--color-accent)]/10 shadow-[0_0_24px_-6px_var(--color-accent)]"
+                    : "border-[var(--color-border)] bg-[var(--color-foreground)]/[0.02] hover:border-[var(--color-accent)]/50"}`}>
       <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-[family-name:var(--font-body)] text-xs font-semibold
                     ${isSelected ? "bg-[var(--color-accent)] text-[var(--color-background)]" : "bg-[var(--color-foreground)]/10 text-[var(--color-foreground)]/60 group-hover:bg-[var(--color-accent)]/20 group-hover:text-[var(--color-accent)]"}`}>
         {index + 1}
@@ -231,12 +236,12 @@ function CaseStudyPanel({ caseStudy, side }: { caseStudy?: CaseStudy; side: "lef
   const isLeft = side === "left";
 
   return (
-    <div className={`pointer-events-none absolute top-1/2 hidden w-56 -translate-y-1/2 lg:block ${isLeft ? "right-full mr-6" : "left-full ml-6"}`}>
-      <motion.div initial={{ opacity: 0, x: isLeft ? 12 : -12 }} animate={{ opacity: 1, x: 0 }}
+    <div className={`pointer-events-none absolute top-full z-10 mt-3 hidden w-56 lg:block ${isLeft ? "right-full mr-6" : "left-full ml-6"}`}>
+      <motion.div initial={{ opacity: 0, x: isLeft ? 12 : -12, y: -8 }} animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ duration: 0.8, delay: 0.45, ease: [0.22, 1, 0.36, 1] }} className="pointer-events-auto flex items-center gap-2">
         {!isLeft && <span className="shrink-0 text-[var(--color-accent)]/50">←</span>}
         <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-foreground)]/[0.06] p-3">
-          <span className="mb-1.5 block font-[family-name:var(--font-body)] text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-2)]">
+          <span className="mb-1.5 block font-[family-name:var(--font-body)] text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-4)]">
             This actually happened
           </span>
           <div className="mb-1 flex items-center gap-1.5 font-[family-name:var(--font-serif-accent)] text-[13px] italic uppercase tracking-wide text-[var(--color-accent)]/80">

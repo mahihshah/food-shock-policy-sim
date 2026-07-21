@@ -1,19 +1,15 @@
 // lib/highlight.tsx
-//
-// Wrap key words in your data-file strings with ::like this:: and this
-// turns them into coloured underline spans, cycling through 3 accent
-// colours. Safe on plain text with no ::marks:: — renders unchanged.
-
 import type { ReactNode } from "react";
 
 const HL_SPLIT = /::(.+?)::/g;
-const HL_COLORS = ["accent", "accent-2", "accent-3"] as const;
+const HL_COLORS = ["accent", "accent-2", "accent-3", "accent-4"] as const;
 type HlColor = (typeof HL_COLORS)[number];
 
 const COLOR_VARS: Record<HlColor, string> = {
   accent: "var(--color-accent)",
   "accent-2": "var(--color-accent-2)",
   "accent-3": "var(--color-accent-3)",
+  "accent-4": "var(--color-accent-4)",
 };
 
 export function Hl({ children, color = "accent" }: { children: ReactNode; color?: HlColor }) {

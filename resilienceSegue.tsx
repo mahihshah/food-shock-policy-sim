@@ -19,7 +19,7 @@ function ScrollNudge({ targetId, label = "Keep scrolling" }: { targetId: string;
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1, y: [0, 8, 0] }}
       viewport={{ once: true, amount: 0.5 }}
-      transition={{ opacity: { delay: 0.3, duration: 0.6 }, y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}
+      transition={{ opacity: { delay: 1.3, duration: 0.6 }, y: { duration: 1.8, repeat: Infinity, ease: "easeInOut" } }}
       className="mt-8 flex flex-col items-center gap-2 text-[var(--color-accent)]/70 transition-colors hover:text-[var(--color-accent)]
                  focus-visible:outline-none"
       aria-label={label}
