@@ -244,4 +244,41 @@ function ResilienceItemBeat({ item, index }: { item: ResilienceItem; index: numb
         <div className="flex flex-col gap-6">
           <motion.p initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.4 }}
             transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="font-[family-name:var(--font-body)] text-base leading-relaxed text-[var(--color-foreground)]/85 md:text-lg"></motion.p>
+            className="font-[family-name:var(--font-body)] text-base leading-relaxed text-[var(--color-foreground)]/85 md:text-lg">
+            {renderHighlighted(item.biology)}
+          </motion.p>
+
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="rounded-xl border border-[var(--color-border)] bg-[var(--color-foreground)]/[0.03] p-5">
+            <div className="mb-3 flex items-center gap-2 font-[family-name:var(--font-body)] text-[11px] font-semibold uppercase tracking-widest text-[var(--color-accent)]/70">
+              <Landmark size={13} />
+              The economics
+            </div>
+            <ul className="flex flex-col gap-3">
+              {item.economics.map((point, i) => (
+                <li key={i} className="flex gap-2.5 font-[family-name:var(--font-body)] text-sm leading-relaxed text-[var(--color-foreground)]/70">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]/60" />
+                  <span>{renderHighlighted(point)}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
+
+        <motion.aside initial={{ opacity: 0, x: 16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="h-fit rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 lg:sticky lg:top-24">
+          <div className="mb-2 flex items-center gap-1.5 font-[family-name:var(--font-serif-accent)] text-[13px] italic uppercase tracking-wide text-[var(--color-accent)]/80">
+            <span>{item.caseStudy.flag}</span>
+            <span>{item.caseStudy.country}, {item.caseStudy.year}</span>
+          </div>
+          <p className="font-[family-name:var(--font-serif-accent)] text-[15px] italic leading-snug text-[var(--color-foreground)]/90">
+            {renderHighlighted(item.caseStudy.text)}
+          </p>
+          <SourceTag source={item.caseStudy.source} />
+        </motion.aside>
+      </div>
+    </div>
+  );
+}
