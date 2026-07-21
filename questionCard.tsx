@@ -8,7 +8,7 @@ import ResilienceSegue from "./resilienceSegue";
 import { econConceptsById } from "./econConcepts";
 import { EconConceptCallout } from "./EconConceptCallout";
 import { SourceTag } from "./SourceTag";
-import { renderHighlighted } from "./lib/highlight";
+import { renderHighlighted } from "./lib/highlights";
 
 export interface QuestionCardProps {
   scenario: Scenario;
