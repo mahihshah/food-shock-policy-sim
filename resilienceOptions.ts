@@ -7,6 +7,9 @@
 //   - caseStudy: a real-world precedent shown in a side box
 //   - icons: 2-3 Lucide icon names (must match named exports from 'lucide-react')
 //
+// HIGHLIGHTS: ::phrase:: marks render as coloured underlines via
+// renderHighlighted() in resilienceCards.tsx.
+//
 // Pure data - no React/HTML here, same pattern as scenarios.ts.
 
 export interface CaseStudyBox {
@@ -18,26 +21,18 @@ export interface CaseStudyBox {
 }
 
 export interface ResilienceItem {
-  /** Short technical name of this specific intervention */
   title: string;
-  /** Accessible biology intro - jargon explained inline, shown as the opening paragraph */
   biology: string;
-  /** 2-3 bullets connecting the mechanism to core economics concepts */
   economics: string[];
-  /** Real-world precedent shown in the side box */
   caseStudy: CaseStudyBox;
-  /** 2-3 Lucide icon names matching the content */
   icons: string[];
 }
 
 export interface ResilienceCategory {
-  /** Unique id, also used as the DOM anchor when a card is expanded */
   id: string;
   emoji: string;
   title: string;
-  /** One-line summary shown on the card face itself (keep this short) */
   whatThisMeans: string;
-  /** Filename only - actual file lives at /public/resilience/<image> */
   image: string;
   items: ResilienceItem[];
 }
@@ -54,9 +49,9 @@ export const resilienceCategories: ResilienceCategory[] = [
       {
         title: "Brewery Transition Kits",
         biology:
-          "Breweries already run large fermentation tanks - the same vessels that turn sugar into beer. Standardising the pipes and fittings on these tanks means they can just as easily be switched to grow single-cell protein: colonies of bacteria or yeast that multiply into a dense, edible, high-protein paste. Because microbes reproduce far faster than crops or livestock, a full batch can be ready in 3 to 8 days, compared with roughly 20 weeks to raise poultry - and none of it needs sunlight or farmland.",
+          "Breweries already run large fermentation tanks - the same vessels that turn sugar into beer. Standardising the pipes and fittings on these tanks means they can just as easily be switched to grow single-cell protein: colonies of bacteria or yeast that multiply into a dense, edible, high-protein paste. Because microbes reproduce far faster than crops or livestock, ::a full batch can be ready in 3 to 8 days::, compared with roughly 20 weeks to raise poultry - and none of it needs sunlight or farmland.",
         economics: [
-          "CapEx reduction: retrofitting existing tanks avoids the huge capital expenditure (CapEx - the upfront cost of building new factories) needed to construct dedicated protein plants from scratch, using an estimated 1.89 billion hectolitres of already-idle global brewing capacity.",
+          "CapEx reduction: retrofitting existing tanks avoids the huge capital expenditure (CapEx - the upfront cost of building new factories) needed to construct dedicated protein plants from scratch, using an estimated ::1.89 billion hectolitres:: of already-idle global brewing capacity.",
           "Waste-to-value: brewery byproducts that currently sell for a low €35–50 per tonne can be converted into high-value protein ingredients, turning a disposal cost into a revenue stream.",
           "Flexibility: because the same tanks can pivot between fuel, fibre, and food, producers can shift output toward whichever market is paying the most - similar to a factory reallocating capacity to its most profitable use.",
         ],
@@ -64,7 +59,7 @@ export const resilienceCategories: ResilienceCategory[] = [
           flag: "🇰🇿",
           country: "Kazakhstan",
           year: "ongoing",
-          text: "Kazakhstan has established bioprotein production from natural gas, modernising its livestock feed industry without needing extra farmland or irrigation water.",
+          text: "Kazakhstan has established bioprotein production from natural gas, modernising its livestock feed industry ::without needing extra farmland or irrigation water::.",
           source: "FAO, \"Bioprotein production from natural gas,\" 2025.",
         },
         icons: ["Factory", "FlaskConical", "Timer"],
@@ -74,14 +69,14 @@ export const resilienceCategories: ResilienceCategory[] = [
         biology:
           "Wood is mostly made of lignocellulose - a tough combination of cellulose (long sugar chains) and lignin (a rigid structural glue) that human bodies can't digest. Enzymes called cellulase and xylanase act like biological scissors, cutting those long sugar chains into simple sugars (monosaccharides) that are edible. Paper mills already break wood down mechanically; keeping a stock of these enzymes on hand lets them go one step further and turn wood pulp into a sugary, energy-rich liquid.",
         economics: [
-          "Reusable catalysts: the enzymes can be immobilised (chemically anchored to a solid surface) and reused for 20+ cycles, spreading their cost over many batches instead of buying fresh enzyme each time.",
+          "Reusable catalysts: the enzymes can be immobilised (chemically anchored to a solid surface) and ::reused for 20+ cycles::, spreading their cost over many batches instead of buying fresh enzyme each time.",
           "Lower processing costs: enzymatic reactions run at milder temperatures and pressures than chemical alternatives, cutting energy costs and avoiding toxic byproducts like soap.",
         ],
         caseStudy: {
           flag: "🧪",
           country: "Research finding",
           year: "2018",
-          text: "Researchers used co-immobilised enzyme cocktails to raise sugarcane bagasse conversion into edible sugars by over 150% compared to free (non-reusable) enzymes.",
+          text: "Researchers used co-immobilised enzyme cocktails to raise sugarcane bagasse conversion into edible sugars by ::over 150%:: compared to free (non-reusable) enzymes.",
           source: "Andler & Goddard, npj Science of Food, 2018.",
         },
         icons: ["Scissors", "Leaf", "FlaskConical"],
@@ -91,14 +86,14 @@ export const resilienceCategories: ResilienceCategory[] = [
         biology:
           "Ethanol plants normally turn the starch inside corn into sugar, then ferment that sugar into fuel-grade alcohol. A diversion valve interrupts the process right after the starch has been broken into sugar - before fermentation - and instead routes that human-grade glucose (a simple, edible sugar) straight into the food supply.",
         economics: [
-          "Off-ramp for demand: biofuel mandates currently lock up 16% of global maize; a valve gives policymakers an instant way to redirect that demand back to food markets instead of waiting for new legislation.",
+          "Off-ramp for demand: biofuel mandates currently lock up ::16% of global maize::; a valve gives policymakers an instant way to redirect that demand back to food markets instead of waiting for new legislation.",
           "Price stabilisation: when food prices exceed fuel prices, producers have a financial incentive to sell the diverted glucose as food, since it becomes the more profitable output - a natural market response to changing relative prices.",
         ],
         caseStudy: {
           flag: "🇧🇷",
           country: "Brazil & EU",
           year: "2022",
-          text: "Following the Russia-Ukraine war, Brazil and the EU cut biofuel blending mandates, redirecting rapeseed and maize away from fuel tanks and back toward the food supply.",
+          text: "Following the Russia-Ukraine war, Brazil and the EU ::cut biofuel blending mandates::, redirecting rapeseed and maize away from fuel tanks and back toward the food supply.",
           source: "Glauber & Hebebrand, IFPRI, 2023.",
         },
         icons: ["Fuel", "Wheat", "RefreshCw"],
@@ -115,7 +110,7 @@ export const resilienceCategories: ResilienceCategory[] = [
           flag: "🇺🇸",
           country: "United States",
           year: "2020",
-          text: "Operation Warp Speed pre-ordered vaccines and scaled manufacturing capacity months before any product existed - proving that paying for 'readiness' before a crisis saves critical time once one hits.",
+          text: "Operation Warp Speed pre-ordered vaccines and scaled manufacturing capacity ::months before any product existed:: - proving that paying for 'readiness' before a crisis saves critical time once one hits.",
           source: "The Good Food Institute, 2025.",
         },
         icons: ["Landmark", "FlaskConical", "ShieldCheck"],
@@ -136,7 +131,7 @@ export const resilienceCategories: ResilienceCategory[] = [
           "Macroalgae - seaweed - is one of the fastest-growing organisms on Earth and needs no soil, fresh water, or fertiliser to grow; it draws everything it needs from seawater. 'Mariculture' just means farming in the sea. Pre-approving coastal zones for this kind of farming means the biology is ready to scale the moment permission is needed, rather than waiting months for permits.",
         economics: [
           "Reduced red tape: pre-permitting removes the administrative lag between deciding to scale up and actually being allowed to - in a shortage, the opportunity cost of delay is measured in missed harvests.",
-          "Global capacity: the UN estimates the world could be fed using just 2% of the ocean for sustainable farming, showing how much slack pre-permitted zones could unlock.",
+          "Global capacity: the UN estimates the world could be fed using just ::2% of the ocean:: for sustainable farming, showing how much slack pre-permitted zones could unlock.",
         ],
         caseStudy: {
           flag: "🇳🇦",
@@ -152,7 +147,7 @@ export const resilienceCategories: ResilienceCategory[] = [
         biology:
           "Regenerative ocean farms use vertical rope grids anchored in the water; seaweed and shellfish attach to the ropes and grow using only sunlight, seawater nutrients, and dissolved gases - no feed required. Warehousing the rope itself, rather than the crops, means the infrastructure can be towed out and deployed within days.",
         economics: [
-          "Low barrier to entry: a 20-acre rope farm can be started for roughly $20,000–25,000 - a relatively small capital outlay compared to land-based agriculture.",
+          "Low barrier to entry: a 20-acre rope farm can be started for roughly ::$20,000–25,000:: - a relatively small capital outlay compared to land-based agriculture.",
           "Paying for public goods: programmes like the Kelp Climate Fund pay farmers for the farm's environmental impact (e.g. carbon capture) - an example of internalising a positive externality, a benefit to society that wouldn't otherwise show up in the market price.",
         ],
         caseStudy: {
@@ -184,10 +179,10 @@ export const resilienceCategories: ResilienceCategory[] = [
       {
         title: "Wild Seafood Rations",
         biology:
-          "Pelagic species live in the open sea; benthic species live on the sea floor. Mapping their location and abundance ahead of time means any emergency harvest can be organised and sustainable rather than a chaotic scramble that risks collapsing the population entirely - currently 44% of assessed wild stocks are already fished at their maximum sustainable level, and 25% are already overfished.",
+          "Pelagic species live in the open sea; benthic species live on the sea floor. Mapping their location and abundance ahead of time means any emergency harvest can be organised and sustainable rather than a chaotic scramble that risks collapsing the population entirely - currently ::44% of assessed wild stocks are already fished at their maximum sustainable level, and 25% are already overfished::.",
         economics: [
           "Protecting livelihoods: over 100 million people depend on small-scale fisheries, so unmanaged harvesting risks a classic tragedy of the commons - a shared resource depleted because no single user bears the full cost of overuse.",
-          "Reducing waste: better mapping could cut into the roughly 27 million tonnes of fish discarded annually as unwanted bycatch, recovering calories that are currently wasted.",
+          "Reducing waste: better mapping could cut into the roughly ::27 million tonnes of fish discarded annually:: as unwanted bycatch, recovering calories that are currently wasted.",
         ],
         caseStudy: {
           flag: "🌐",
@@ -211,7 +206,7 @@ export const resilienceCategories: ResilienceCategory[] = [
       {
         title: "Digital Microbe Vaults",
         biology:
-          "Methanotrophic and hydrogenotrophic bacteria consume methane or hydrogen gas and convert it into biomass - up to 67% of which can be protein, packed with essential amino acids (the building blocks of protein the body can't make itself). A public, patent-free genetic registry means any country with access to natural gas could, in principle, grow its own protein supply without paying licensing fees.",
+          "Methanotrophic and hydrogenotrophic bacteria consume methane or hydrogen gas and convert it into biomass - up to ::67% of which can be protein::, packed with essential amino acids (the building blocks of protein the body can't make itself). A public, patent-free genetic registry means any country with access to natural gas could, in principle, grow its own protein supply without paying licensing fees.",
         economics: [
           "Lower R&D barriers: this follows the same logic as a TRIPS waiver (an international agreement temporarily suspending patent protection) - it removes the cost of years of private research for anyone using the recipe.",
           "Turning a byproduct into a resource: countries with methane emissions from sources like coal mines could convert a wasted, even harmful, gas into nutrition.",
@@ -220,7 +215,7 @@ export const resilienceCategories: ResilienceCategory[] = [
           flag: "🌐",
           country: "Global precedent",
           year: "2020",
-          text: "South Africa and India proposed a TRIPS patent waiver for COVID-19 vaccines - the same logic a microbe vault would apply to food: skip licensing fees and manufacture locally.",
+          text: "South Africa and India proposed a TRIPS patent waiver for COVID-19 vaccines - the same logic a microbe vault would apply to food: ::skip licensing fees and manufacture locally::.",
           source: "CSIS Perspectives on Innovation, 2023.",
         },
         icons: ["Dna", "Unlock", "TestTube"],
@@ -237,7 +232,7 @@ export const resilienceCategories: ResilienceCategory[] = [
           flag: "🇸🇾",
           country: "Syria / Lebanon / Morocco",
           year: "2015",
-          text: "When war disrupted its Syrian genebank, ICARDA performed the first-ever withdrawal from the Svalbard Global Seed Vault, regenerating its seed collection in Lebanon and Morocco.",
+          text: "When war disrupted its Syrian genebank, ICARDA performed the ::first-ever withdrawal:: from the Svalbard Global Seed Vault, regenerating its seed collection in Lebanon and Morocco.",
           source: "Crop Trust.",
         },
         icons: ["Snowflake", "Sprout", "Package"],
@@ -248,13 +243,13 @@ export const resilienceCategories: ResilienceCategory[] = [
           "Cellulase enzymes break down lignocellulose (the tough, fibrous material in wood, stalks, and leaves) into fermentable sugars that humans or microbes can use for energy. Publishing the biological blueprint for manufacturing these enzymes - rather than keeping it as a trade secret - lets any local mill produce them itself.",
         economics: [
           "Reusable catalysts: like other enzyme applications, immobilising cellulase on a solid support allows 20+ reuse cycles, lowering the cost per tonne of food produced over time.",
-          "Democratising R&D: developing new food biotech typically costs around $1 billion; open-source blueprints let smaller, local processors skip that cost entirely.",
+          "Democratising R&D: developing new food biotech typically costs around ::$1 billion::; open-source blueprints let smaller, local processors skip that cost entirely.",
         ],
         caseStudy: {
           flag: "🧪",
           country: "Research finding",
           year: "2018",
-          text: "Researchers used 'combi-CLEA' enzyme cocktails to convert sugarcane bagasse into edible glucose at a 150% higher rate than free enzymes.",
+          text: "Researchers used 'combi-CLEA' enzyme cocktails to convert sugarcane bagasse into edible glucose at a ::150% higher rate:: than free enzymes.",
           source: "Andler & Goddard, npj Science of Food, 2018.",
         },
         icons: ["FlaskConical", "BookOpen", "Leaf"],
@@ -289,10 +284,10 @@ export const resilienceCategories: ResilienceCategory[] = [
       {
         title: "Gas-To-Protein Bioreactors",
         biology:
-          "Methanotrophic bacteria - the same methane-eating microbes used in Digital Microbe Vaults - are grown industrially in sealed tanks fed with natural gas or hydrogen. Utilisation efficiency is nearly 100%, meaning almost none of the gas is wasted, and the resulting biomass can be over 42% essential amino acids by weight, entirely without sunlight, soil, or fresh water.",
+          "Methanotrophic bacteria - the same methane-eating microbes used in Digital Microbe Vaults - are grown industrially in sealed tanks fed with natural gas or hydrogen. Utilisation efficiency is ::nearly 100%::, meaning almost none of the gas is wasted, and the resulting biomass can be over 42% essential amino acids by weight, entirely without sunlight, soil, or fresh water.",
         economics: [
           "Regional comparative advantage: this is most viable wherever natural gas is already cheap or is otherwise a hazardous waste product (like methane leaking from coal mines) - turning a local liability into a local asset.",
-          "Value from a potent pollutant: methane traps roughly 28 times more heat than CO2, so converting it into food also reduces a costly environmental externality.",
+          "Value from a potent pollutant: methane traps roughly ::28 times more heat than CO2::, so converting it into food also reduces a costly environmental externality.",
         ],
         caseStudy: {
           flag: "🇰🇿",
@@ -306,7 +301,7 @@ export const resilienceCategories: ResilienceCategory[] = [
       {
         title: "Leaf Concentrate Presses",
         biology:
-          "Many leaves are surprisingly high in protein, but also contain bitter or even toxic alkaloids (naturally occurring plant compounds) that make them inedible as-is. Mechanical fractionation presses physically break open leaf cells, and filtration then separates the pure protein and vitamins from the fibrous, toxic remainder - cauliflower leaves, for example, an ordinarily discarded byproduct, are roughly 20% protein.",
+          "Many leaves are surprisingly high in protein, but also contain bitter or even toxic alkaloids (naturally occurring plant compounds) that make them inedible as-is. Mechanical fractionation presses physically break open leaf cells, and filtration then separates the pure protein and vitamins from the fibrous, toxic remainder - cauliflower leaves, for example, an ordinarily discarded byproduct, are ::roughly 20% protein::.",
         economics: [
           "Valorising waste: turning a byproduct that's normally thrown away into a saleable ingredient creates a new revenue stream for farmers - monetising what used to be a cost.",
           "Lower environmental footprint: producing protein from leaves already grown as farm byproducts has a smaller land and emissions footprint than raising animals for the same protein.",
@@ -326,7 +321,7 @@ export const resilienceCategories: ResilienceCategory[] = [
           "Through chemical synthesis (building complex molecules from simpler ones in a lab), industrial hydrocarbons - the molecules that make up crude oil and its derivatives - can be refined into edible synthetic fats like palmitic and stearic acid. These provide dense, storable calories as a last-resort energy source when normal fats are unavailable.",
         economics: [
           "Asset flexibility: petrochemical infrastructure can pivot toward food-grade output when fuel prices are low relative to food prices - an economic 'off-ramp' similar to biofuel diversion.",
-          "Bridging a recovery gap: since crop recovery after a shock typically takes 6–12 months, this option provides temporary caloric supply during exactly the window when food would otherwise be scarcest.",
+          "Bridging a recovery gap: since crop recovery after a shock typically takes ::6–12 months::, this option provides temporary caloric supply during exactly the window when food would otherwise be scarcest.",
         ],
         caseStudy: {
           flag: "🇧🇷",
@@ -343,7 +338,7 @@ export const resilienceCategories: ResilienceCategory[] = [
           "Saprophytic fungi are mushrooms that feed on dead organic matter rather than needing sunlight, so they grow readily indoors in the dark. Inoculating - deliberately introducing fungal spores into - waste material like corn stalks or spent brewery grain lets mushrooms break down otherwise-indigestible plant fibre into fast-growing, protein-rich food.",
         economics: [
           "Waste-to-revenue: spent brewery grain currently sells for only about €35–50 per tonne; converting it into mushrooms can multiply its value substantially.",
-          "Circular economy: this model turns any factory that produces organic waste into a decentralised mushroom-growing hub, cutting into the roughly 40% of food currently lost to waste.",
+          "Circular economy: this model turns any factory that produces organic waste into a decentralised mushroom-growing hub, cutting into the roughly ::40% of food currently lost to waste::.",
         ],
         caseStudy: {
           flag: "🇨🇭",
@@ -367,7 +362,7 @@ export const resilienceCategories: ResilienceCategory[] = [
       {
         title: "Emergency Grain Diversion",
         biology:
-          "Feeding grain to livestock is calorically inefficient - up to 90% or more of the plant's energy is lost as the animal converts it into meat over months. A legal trigger that instantly redirects grain from animal feed to direct human consumption captures those calories immediately, skipping the inefficient conversion step, at a time when 16% of global maize currently goes to biofuel or feed.",
+          "Feeding grain to livestock is calorically inefficient - ::up to 90% or more:: of the plant's energy is lost as the animal converts it into meat over months. A legal trigger that instantly redirects grain from animal feed to direct human consumption captures those calories immediately, skipping the inefficient conversion step, at a time when 16% of global maize currently goes to biofuel or feed.",
         economics: [
           "Inelastic demand: food demand doesn't fall much even as prices rise sharply - this 'inelasticity' is exactly what drives food prices to extreme highs during a shortage; diverting grain adds supply precisely when it's needed most.",
           "Automatic 'off-ramps': legislating a trigger removes the political delay of passing emergency laws in real time, since the mechanism activates automatically once prices cross a pre-set threshold.",
@@ -393,7 +388,7 @@ export const resilienceCategories: ResilienceCategory[] = [
           flag: "🇺🇸",
           country: "United States",
           year: "recent",
-          text: "The US National Security Commission on Emerging Biotechnology has proposed pre-purchasing 'options' on industrial fermentation capacity, similar to vaccine pre-orders, so cities could pivot to food production within a week of a crisis.",
+          text: "The US National Security Commission on Emerging Biotechnology has proposed pre-purchasing 'options' on industrial fermentation capacity, similar to vaccine pre-orders, so cities could pivot to food production ::within a week of a crisis::.",
           source: "The Good Food Institute, 2025.",
         },
         icons: ["Banknote", "FlaskConical", "ScrollText"],
@@ -410,7 +405,7 @@ export const resilienceCategories: ResilienceCategory[] = [
           flag: "🇺🇸",
           country: "United States",
           year: "2024",
-          text: "When avian flu pushed egg prices up nearly 37% in a year, many US shelves emptied not from a true shortage but from localised hoarding - a $1.4 billion shock that rationing software could have limited.",
+          text: "When avian flu pushed egg prices up nearly ::37% in a year::, many US shelves emptied not from a true shortage but from localised hoarding - a ::$1.4 billion shock:: that rationing software could have limited.",
           source: "The Good Food Institute, 2025.",
         },
         icons: ["Lock", "ShoppingCart", "ShieldCheck"],
@@ -454,7 +449,7 @@ export const resilienceCategories: ResilienceCategory[] = [
           flag: "🇦🇫",
           country: "Afghanistan",
           year: "2021–22",
-          text: "During the 2021–22 food crisis, the FAO delivered emergency fertiliser and seeds to 518,000 Afghan households, letting marginal farmers grow their own wheat despite drought and economic collapse.",
+          text: "During the 2021–22 food crisis, the FAO delivered emergency fertiliser and seeds to ::518,000 Afghan households::, letting marginal farmers grow their own wheat despite drought and economic collapse.",
           source: "FAO, 2022.",
         },
         icons: ["Package", "Sprout", "Warehouse"],
@@ -498,14 +493,14 @@ export const resilienceCategories: ResilienceCategory[] = [
         biology:
           "Food-production systems - hydroponic farms, bioreactors - need water free of pathogens (disease-causing organisms) to avoid contaminating the nutrient solutions crops and microbes grow in. Compact blocks of flocculants (chemicals that clump contaminants together for easy removal) and chlorine can quickly render dirty water safe for industrial use.",
         economics: [
-          "Protecting sunk investment: a grid failure that contaminates the water supply could otherwise render billions of dollars of processing infrastructure useless; purification cubes are a comparatively low-cost way to prevent that loss.",
+          "Protecting sunk investment: a grid failure that contaminates the water supply could otherwise render ::billions of dollars:: of processing infrastructure useless; purification cubes are a comparatively low-cost way to prevent that loss.",
           "Compact storage: dense, shelf-stable blocks take up far less warehouse space per unit of purification capacity than bottled water.",
         ],
         caseStudy: {
           flag: "🇸🇬",
           country: "Singapore",
           year: "2030 target",
-          text: "Singapore's \"30 by 30\" plan uses advanced hydroponics - including underwater projects like Nemo's Garden - aiming to produce 30% of its food locally by 2030, underpinned by reliable local water purification.",
+          text: "Singapore's \"30 by 30\" plan uses advanced hydroponics - including underwater projects like Nemo's Garden - aiming to produce ::30% of its food locally by 2030::, underpinned by reliable local water purification.",
           source: "Singapore Food Agency / FAO.",
         },
         icons: ["Droplets", "ShieldCheck", "Package"],
@@ -525,8 +520,8 @@ export const resilienceCategories: ResilienceCategory[] = [
         biology:
           "Hydroponics grows plants without soil by delivering the 13 essential minerals roots need directly through a nutrient solution. Removing soil also removes soil-borne pests and diseases, and LED grow lights let the whole system run indoors, in the dark, independent of outdoor growing seasons.",
         economics: [
-          "Low barrier to entry: basic home kits now cost under $100, making decentralised food production affordable for individual households, not just institutions.",
-          "Resource efficiency: closed-loop systems recirculate water and nutrients, using around 95% less water than traditional soil farming.",
+          "Low barrier to entry: basic home kits now cost ::under $100::, making decentralised food production affordable for individual households, not just institutions.",
+          "Resource efficiency: closed-loop systems recirculate water and nutrients, using around ::95% less water:: than traditional soil farming.",
         ],
         caseStudy: {
           flag: "🇸🇬",
@@ -549,7 +544,7 @@ export const resilienceCategories: ResilienceCategory[] = [
           flag: "🇧🇩",
           country: "Bangladesh",
           year: "2024",
-          text: "Shahina Begum started with two plastic crates and one kilogram of earthworms; her nine-crate vermicomposting system now earns her family roughly 3,000 taka a month.",
+          text: "Shahina Begum started with two plastic crates and one kilogram of earthworms; her nine-crate vermicomposting system now earns her family roughly ::3,000 taka a month::.",
           source: "CGIAR System, 2024.",
         },
         icons: ["Recycle", "Sprout", "HandCoins"],
@@ -566,7 +561,7 @@ export const resilienceCategories: ResilienceCategory[] = [
           flag: "🇨🇭",
           country: "Switzerland",
           year: "2024",
-          text: "ProSeed's modular processing units, installed directly at breweries, show how repurposed hardware can turn discarded organic waste into a 40% protein concentrate.",
+          text: "ProSeed's modular processing units, installed directly at breweries, show how repurposed hardware can turn discarded organic waste into a ::40% protein concentrate::.",
           source: "FI Global Insights, 2024.",
         },
         icons: ["Refrigerator", "Sprout", "Recycle"],
