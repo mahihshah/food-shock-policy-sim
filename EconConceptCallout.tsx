@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { EconConcept } from "./econConcepts";
-import { renderHighlighted } from "./lib/highlight";
+import { renderHighlighted } from "./lib/highlights";
 
 function SingleCallout({ concept, side }: { concept: EconConcept; side: "left" | "right" }) {
   const isLeft = side === "left";
