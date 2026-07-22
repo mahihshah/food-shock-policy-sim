@@ -8,6 +8,7 @@ import ResilienceSegue from "./resilienceSegue";
 import { econConceptsById } from "./econConcepts";
 import { SourceTag } from "./SourceTag";
 import { renderHighlighted } from "./lib/highlights";
+import { CropEmojiRow } from "./CropEmojiRow";
 
 export interface QuestionCardProps {
   scenario: Scenario;
@@ -73,6 +74,7 @@ export default function QuestionCard({
           className="flex h-dvh w-full flex-col items-center justify-center overflow-hidden bg-[var(--color-background)] px-6 text-center outline-none"
         >
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="flex max-w-3xl flex-col items-center gap-5">
+            {scenario.isStart && <CropEmojiRow />}
             <motion.h1 variants={lineVariants} className="font-[family-name:var(--font-display)] text-4xl font-bold leading-[1.05] tracking-tight text-[var(--color-foreground)] sm:text-5xl md:text-6xl">
               {headline}
             </motion.h1>
@@ -144,7 +146,7 @@ export default function QuestionCard({
               </p>
 
               {scenario.supportingInfo && (
-                <div className="mb-8 rounded-lg border border-[var(--color-accent-3)]/30 bg-[var(--color-foreground)]/[0.03] p-4 font-[family-name:var(--font-body)] text-sm leading-relaxed text-[var(--color-foreground)]/60">
+                <div className="mb-8 rounded-lg border-2 border-[var(--color-accent-3)]/60 bg-[var(--color-foreground)]/[0.03] p-4 font-[family-name:var(--font-body)] text-sm leading-relaxed text-[var(--color-foreground)]/60">
                   {renderHighlighted(scenario.supportingInfo)}
                 </div>
               )}
@@ -152,11 +154,14 @@ export default function QuestionCard({
               {scenario.isEnding ? (
                 <div className="mt-8">
                   {pathSummary && (
-                    <p className="mb-4 inline-block rounded-lg border border-[var(--color-accent-4)]/40 px-3 py-2 font-[family-name:var(--font-serif-accent)] text-[13px] italic text-[var(--color-foreground)]/50">
+                    <p className="mb-4 inline-block rounded-lg border-2 border-[var(--color-accent-4)] px-3 py-2 font-[family-name:var(--font-serif-accent)] text-[13px] italic text-[var(--color-foreground)]/50">
                       Your path: {pathSummary}
                     </p>
                   )}
-                  <p className="font-[family-name:var(--font-display)] text-xl font-bold text-[#ff4d3d] md:text-2xl">
+                  <p
+                    className="font-[family-name:var(--font-display)] text-xl md:text-2xl"
+                    style={{ color: "#ff3b2f", fontWeight: 800 }}
+                  >
                     {renderHighlighted(scenario.outcome ?? "")}
                   </p>
                   {retryInfo ? (
@@ -274,11 +279,13 @@ function ChoiceButton({ choice, index, isSelected, onClick }: {
       whileHover={{ scale: 1.02, backgroundColor: "color-mix(in srgb, var(--color-accent) 14%, transparent)" }}
       whileTap={{ scale: 0.98 }}
       aria-pressed={isSelected}
-      className={`group flex w-full items-start gap-4 rounded-xl border px-5 py-4 text-left transition-colors
+      className={`group flex w-full items-start gap-4 rounded-xl border-2 px-5 py-4 text-left transition-colors
                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]/60
                   ${isSelected
                     ? "border-[var(--color-accent)] bg-[var(--color-accent)]/10 shadow-[0_0_24px_-6px_var(--color-accent)]"
-                    : "border-[var(--color-border)] bg-[var(--color-foreground)]/[0.02] hover:border-[var(--color-accent)]/50"}`}>
+                    : index === 0
+                    ? "border-[var(--color-accent-2)]/40 bg-[var(--color-foreground)]/[0.02] hover:border-[var(--color-accent-2)]"
+                    : "border-[var(--color-accent-3)]/40 bg-[var(--color-foreground)]/[0.02] hover:border-[var(--color-accent-3)]"}`}>
       <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-[family-name:var(--font-body)] text-xs font-semibold
                     ${isSelected ? "bg-[var(--color-accent)] text-[var(--color-background)]" : "bg-[var(--color-foreground)]/10 text-[var(--color-foreground)]/60 group-hover:bg-[var(--color-accent)]/20 group-hover:text-[var(--color-accent)]"}`}>
         {index + 1}
