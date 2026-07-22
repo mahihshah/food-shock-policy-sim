@@ -49,7 +49,7 @@ export const scenarios: Scenario[] = [
     id: "00",
     title: "Role",
     description:
-      "You are the Minister for Food Security.\n\nYour country is middle-income, and like most of the world, it doesn't grow or make everything it needs. You import a share of your key food staples, plus the fertiliser and other agricultural inputs your farmers depend on.\n\nMarkets, households and other governments respond to every decision you make.\n\nYour have one goal: make sure everyone has enough to eat, no matter what.",
+      "You are the Minister for Food Security.\n\nYour country is middle-income, and like most of the world, it doesn't grow or make everything it needs. You import a share of your key food staples, plus the fertiliser and other agricultural inputs your farmers depend on.\n\nMarkets, households and other governments respond to every decision you make.\n\nYou have one goal: make sure everyone has enough to eat, no matter what.",
     isLanding: true,
     choices: [{ text: "I'm ready", nextId: "0" }],
   },
