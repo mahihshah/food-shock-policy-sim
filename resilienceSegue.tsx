@@ -64,7 +64,7 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
       <div id="resilience-group-c" className="flex min-h-screen w-full max-w-xl snap-start flex-col items-center justify-center gap-4 px-6 text-center">
         <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={VIEWPORT} transition={{ duration: 0.7, ease: EASE }}
           className="text-xl text-[var(--color-foreground)]/80 font-[family-name:var(--font-body)] md:text-2xl">
-          And the worse the shock (a nuclear winter, a supervolcano eruption, a stray asteroid, choose your apocalypse), the less that market ever corrects itself in time. You&apos;d still have to step in.
+          And the worse the shock (a nuclear winter, a supervolcano eruption, a stray asteroid), the less that market ever corrects itself in time. You&apos;d still have to step in.
         </motion.p>
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={VIEWPORT} transition={{ delay: 0.6, duration: 0.6 }}
           className="flex items-center gap-1.5 font-[family-name:var(--font-serif-accent)] text-xs italic text-[var(--color-accent)]/60">
@@ -73,7 +73,7 @@ export default function ResilienceSegue({ onRestart }: ResilienceSegueProps) {
         </motion.div>
         <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={VIEWPORT} transition={{ duration: 0.8, delay: 1.4, ease: EASE }}
           className="text-2xl text-[var(--color-danger)] font-[family-name:var(--font-body)] md:text-3xl">
-          Turns out it was the sequencing that sank you, not the intervention itself. You were never wrong to act. You just hadn&apos;t worked out how yet.
+            Ad hoc interventions can help, but they rarely work as well as we'd hope. By the time you're scrambling to respond, the system has already lost much of its resilience. Markets and governments both have limits during extreme shocks. When a disaster spirals into catastrophe, it's often because resilience wasn&apos;t built beforehand.
         </motion.p>
         <ScrollNudge targetId="resilience-group-d" />
       </div>
