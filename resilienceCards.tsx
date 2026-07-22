@@ -78,8 +78,8 @@ export default function ResilienceCards() {
         <h2 className="font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--color-foreground)] md:text-3xl">
           Seven ways to build resilience before the next shock
         </h2>
-        <p className="mt-3 font-[family-name:var(--font-body)] text-sm text-[var(--color-foreground)]/60 md:text-base">
-          Browse with the arrows, the keyboard, or by hovering a card. Pick one, <em className="italic text-[var(--color-foreground)]/85">or more</em>, to explore in depth.
+        <p className="mt-3 font-[family-name:var(--font-serif-accent)] text-sm italic md:text-base" style={{ color: "var(--color-accent-3)" }}>
+          Browse with the arrows, the keyboard, or by hovering a card. Pick one (or more) to explore in depth.
         </p>
       </div>
 

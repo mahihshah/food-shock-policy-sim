@@ -196,6 +196,9 @@ export default function QuestionCard({
                 </div>
               ) : (
                 <div className="mt-8 flex flex-col gap-3">
+                  <p className="mb-1 font-[family-name:var(--font-display)] text-sm font-semibold uppercase tracking-wide text-[var(--color-accent)]/80">
+                    What will you do next?
+                  </p>
                   {scenario.choices.map((choice, index) => (
                     <div key={choice.nextId + index} className="relative">
                       <ChoiceButton choice={choice} index={index} isSelected={selectedIndex === index} onClick={() => handleClick(index)} />
@@ -276,8 +279,8 @@ function ChoiceButton({ choice, index, isSelected, onClick }: {
 }) {
   return (
     <motion.button type="button" onClick={onClick}
-      whileHover={{ scale: 1.02, backgroundColor: "color-mix(in srgb, var(--color-accent) 14%, transparent)" }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ scale: 1.045, backgroundColor: "color-mix(in srgb, var(--color-accent) 22%, transparent)" }}
+      whileTap={{ scale: 0.97 }}
       aria-pressed={isSelected}
       className={`group flex w-full items-start gap-4 rounded-xl border-2 px-5 py-4 text-left transition-colors
                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]/60
@@ -313,8 +316,8 @@ function CaseStudyPanel({ caseStudy, side }: { caseStudy?: CaseStudy; side: "lef
       <motion.div initial={{ opacity: 0, x: isLeft ? 12 : -12 }} animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.45, ease: [0.22, 1, 0.36, 1] }} className="pointer-events-auto flex items-center gap-2">
         {!isLeft && <span className="shrink-0 text-[var(--color-accent)]/50">←</span>}
-        <div className="rounded-lg border border-[var(--color-accent-2)]/30 bg-[var(--color-foreground)]/[0.06] p-3">
-          <span className="mb-1.5 block font-[family-name:var(--font-body)] text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-2)]">
+        <div className="rounded-lg border-2 bg-[var(--color-foreground)]/[0.06] p-3" style={{ borderImage: "linear-gradient(135deg, var(--color-accent-2), var(--color-accent-3), var(--color-accent)) 1" }}>
+          <span className="mb-1.5 block font-[family-name:var(--font-body)] text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: "#3ddc84" }}>
             This actually happened
           </span>
           <div className="mb-1 flex items-center gap-1.5 font-[family-name:var(--font-serif-accent)] text-[13px] italic uppercase tracking-wide text-[var(--color-accent)]/80">
