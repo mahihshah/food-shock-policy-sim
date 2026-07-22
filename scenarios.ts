@@ -88,7 +88,7 @@ export const scenarios: Scenario[] = [
       "You stop grain from leaving the country, hoping to keep prices low at home.\n\nTwo of your neighbours respond by cutting off your fertiliser, and you realise you were never as self-sufficient as you thought…",
     choices: [
       {
-        text: "Maintain / intensify the ban",
+        text: "Maintain and intensify the ban",
         nextId: "1.1",
         description:
           "Hold the line, or tighten the export ban further. Prioritise domestic supply above everything else and keep every tonne of grain inside your own borders.",
@@ -104,7 +104,7 @@ export const scenarios: Scenario[] = [
 
   {
     id: "1.1",
-    title: "Maintain / Intensify the Ban",
+    title: "Maintain and Intensify the Ban",
     description:
       "You hold the line on exports.\n\nWithin weeks, however, grain is leaving anyway, just not through anywhere you control well: the border.",
     choices: [
@@ -554,7 +554,7 @@ export const endingScenarios: Scenario[] = scenarios.filter((s) => s.isEnding);
 export const choicePastTense: Record<string, string> = {
   "Impose export controls": "Imposed export controls",
   "Impose a price ceiling on food": "Imposed a price ceiling on food",
-  "Maintain / intensify the ban": "Maintained / intensified the ban",
+  "Maintain and intensify the ban": "Maintained and intensified the ban",
   "Reduce restrictions": "Reduced restrictions",
   "Increase border enforcement": "Increased border enforcement",
   "Legalise some exports through a quota system": "Legalised some exports through a quota system",

@@ -1,19 +1,14 @@
 /* app/globals.css */
 @import "tailwindcss";
 
-/* -----------------------------------------------------------------------
-   Color & font tokens as REAL runtime CSS custom properties (plain :root,
-   not @theme inline — Tailwind v4 inlines @theme values at build time,
-   which silently breaks runtime theme switching).
-   ----------------------------------------------------------------------- */
 :root {
   --color-background: #14181b;
   --color-surface: #1c2226;
   --color-foreground: #f7f4ee;
-  --color-accent: #e8a33d;
-  --color-accent-2: #6fcf97;
-  --color-accent-3: #7fb3d5;
-  --color-accent-4: #c08552;
+  --color-accent: #e8b23d;
+  --color-accent-2: #4fae7a;
+  --color-accent-3: #6fa8c9;
+  --color-accent-4: #b97a48;
   --color-danger: #e8896f;
   --color-border: rgba(255, 255, 255, 0.12);
 
@@ -24,19 +19,6 @@
 
   --radius-card: 1rem;
   color-scheme: dark;
-}
-
-[data-theme="light"] {
-  --color-background: #f7f3ea;
-  --color-surface: #ffffff;
-  --color-foreground: #211d17;
-  --color-accent: #b5721f;
-  --color-accent-2: #2f8f5b;
-  --color-accent-3: #3573a6;
-  --color-accent-4: #8a5a34;
-  --color-danger: #c1502e;
-  --color-border: rgba(0, 0, 0, 0.12);
-  color-scheme: light;
 }
 
 html {

@@ -1,5 +1,5 @@
 import { Syne, Bricolage_Grotesque, Instrument_Serif, Lora } from "next/font/google";
-import { ThemeToggle } from "../ThemeToggle"; // adjust path to match your file structure
+ 
 import "./globals.css";
 
 const syne = Syne({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--font-syne" });
@@ -9,17 +9,8 @@ const lora = Lora({ subsets: ["latin"], variable: "--font-lora" });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="dark">
-      <head>
-        {/* Prevents a light-mode flash on load before React hydrates */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('fss-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}`,
-          }}
-        />
-      </head>
+     <html lang="en">
       <body className={`${syne.variable} ${bricolage.variable} ${instrument.variable} ${lora.variable}`}>
-        <ThemeToggle />
         {children}
       </body>
     </html>
