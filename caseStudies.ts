@@ -56,7 +56,7 @@ Glauber, Joseph, and Abdullah Mamun. "India's New Ban on Rice Exports: Potential
     flag: "🇪🇬",
     country: "Egypt",
     year: "2008",
-    text: `Banned rice exports to stockpile supply domestically. Traders moved ::thousands of tonnes:: across the Libyan and Sudanese desert borders, and through the ports of Alexandria and Port Said.`,
+    text: `Banned rice exports to stockpile supply domestically. The ban affected ::all commercial rice exports:: during the 2008 food price crisis.`,
     source: `Dahan, Maha El, and Sherine El Madany. "Egypt's Rice Export Ban Only Benefits Smugglers." World. Reuters, 19 March 2012. https://www.reuters.com/article/world/egypts-rice-export-ban-only-benefits-smugglers-idUSBRE82I0HS/.
 
 Soon, Jan Mei, and Louise Manning. "Food Smuggling and Trafficking: The Key Factors of Influence." Trends in Food Science & Technology 81 (November 2018): 132–38. https://doi.org/10.1016/j.tifs.2018.09.007.`,
@@ -159,7 +159,7 @@ Oliveros, Asdrúbal. "Dollarization Can't Save the Venezuelan Economy." Accessed
   "2.1": {
     flag: "🇲🇽",
     country: "Mexico",
-    year: "1980s",
+    year: "1980",
     text: `Used the state agri-food agency CONASUPO as a ::monopoly buyer::, purchasing corn from farmers at supported prices while holding the retail tortilla price at a fixed ceiling.`,
     source: `Yunez–Naude, Antonio. "The Dismantling of CONASUPO, a Mexican State Trader in Agriculture - Yunez–Naude - 2003 - The World Economy - Wiley Online Library." Accessed 12 July 2026. https://onlinelibrary.wiley.com/doi/abs/10.1111/1467-9701.00512.`,
   },
