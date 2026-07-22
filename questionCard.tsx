@@ -123,7 +123,7 @@ export default function QuestionCard({
             {/* FRONT — the scenario itself */}
             <div
               style={{ backfaceVisibility: "hidden" }}
-              className="w-full rounded-2xl border border-[var(--color-border)] border-t-2 border-t-[var(--color-accent)]
+              className="w-full rounded-2xl border border-[var(--color-accent-3)]/25 border-t-2 border-t-[var(--color-accent)]
                          bg-[var(--color-surface)] p-8 shadow-2xl shadow-black/40 focus-visible:ring-2
                          focus-visible:ring-[var(--color-accent)]/60 md:p-12"
             >
@@ -156,7 +156,7 @@ export default function QuestionCard({
                       Your path: {pathSummary}
                     </p>
                   )}
-                  <p className="font-[family-name:var(--font-serif-accent)] text-xl italic text-[var(--color-danger)] md:text-2xl">
+                  <p className="font-[family-name:var(--font-display)] text-xl font-bold text-[#ff4d3d] md:text-2xl">
                     {renderHighlighted(scenario.outcome ?? "")}
                   </p>
                   {retryInfo ? (
