@@ -7,6 +7,13 @@ const bricolage = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-br
 const instrument = Instrument_Serif({ subsets: ["latin"], style: ["normal", "italic"], weight: "400", variable: "--font-instrument" });
 const lora = Lora({ subsets: ["latin"], variable: "--font-lora" });
 
+import type { Viewport } from "next";
+
+export const viewport: Viewport = {
+  colorScheme: "dark",
+  themeColor: "#14181b",
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
      <html lang="en">

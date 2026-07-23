@@ -119,12 +119,12 @@ export default function QuestionCard({
           <motion.div
             animate={{ rotateY: showEcon ? 180 : 0 }}
             transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-            style={{ transformStyle: "preserve-3d" }}
+            style={{ transformStyle: "preserve-3d", WebkitTransformStyle: "preserve-3d", willChange: "transform" }}
             className="relative w-full"
           >
             {/* FRONT — the scenario itself */}
             <div
-              style={{ backfaceVisibility: "hidden" }}
+              style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
               className="w-full rounded-2xl border border-[var(--color-accent-3)]/25 border-t-2 border-t-[var(--color-accent)]
                          bg-[var(--color-surface)] p-8 shadow-2xl shadow-black/40 focus-visible:ring-2
                          focus-visible:ring-[var(--color-accent)]/60 md:p-12"
