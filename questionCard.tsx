@@ -75,14 +75,14 @@ export default function QuestionCard({
         >
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="flex max-w-3xl flex-col items-center gap-5">
             {scenario.isStart && <CropEmojiRow />}
-            <motion.h1 variants={lineVariants} className="font-[family-name:var(--font-display)] text-4xl font-bold leading-[1.05] tracking-tight text-[var(--color-foreground,#f7f4ee)] sm:text-5xl md:text-6xl">
+            <motion.h1 variants={lineVariants} className="font-[family-name:var(--font-display)] text-4xl font-bold leading-[1.05] tracking-tight text-[#f7f4ee] sm:text-5xl md:text-6xl">
               {headline}
             </motion.h1>
 
             {bodyParagraphs.map((paragraph, pIndex) =>
               paragraph.split("\n").map((line, lIndex) => (
                 <motion.p key={`${pIndex}-${lIndex}`} variants={lineVariants}
-                  className="font-[family-name:var(--font-body)] text-base leading-relaxed text-[var(--color-foreground,#f7f4ee)]/80 md:text-xl">
+                  className="font-[family-name:var(--font-body)] text-base leading-relaxed text-[#f7f4ee]/80 md:text-xl">
                   {line}
                 </motion.p>
               ))
@@ -94,7 +94,7 @@ export default function QuestionCard({
                 whileHover={{ scale: 1.1, backgroundColor: "color-mix(in srgb, var(--color-accent, #e8b23d) 35%, transparent)" }}
                 whileTap={{ scale: 0.95 }}
                 className="rounded-full border-2 border-[var(--color-accent,#e8b23d)] bg-[var(--color-accent,#e8b23d)]/10
-                           px-10 py-4 font-[family-name:var(--font-body)] text-base font-bold text-[var(--color-foreground,#f7f4ee)]
+                           px-10 py-4 font-[family-name:var(--font-body)] text-base font-bold text-[#f7f4ee]
                            shadow-[0_0_30px_-5px_var(--color-accent,#e8b23d)] transition-colors
                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#e8b23d)]/60 md:text-lg">
                 {scenario.choices[0].text}
@@ -131,22 +131,22 @@ export default function QuestionCard({
             >
               {stepLabel && !scenario.isEnding && (
                 <div className="mb-6 flex items-center justify-end">
-                  <span className="font-[family-name:var(--font-body)] text-xs text-[var(--color-foreground,#f7f4ee)]/40">
+                  <span className="font-[family-name:var(--font-body)] text-xs text-[#f7f4ee]/40">
                     {stepLabel}
                   </span>
                 </div>
               )}
 
-              <h1 className="mb-4 font-[family-name:var(--font-display)] text-3xl leading-tight text-[var(--color-foreground,#f7f4ee)] md:text-4xl">
+              <h1 className="mb-4 font-[family-name:var(--font-display)] text-3xl leading-tight text-[#f7f4ee] md:text-4xl">
                 {scenario.title}
               </h1>
 
-              <p className="mb-6 font-[family-name:var(--font-body)] text-base leading-relaxed text-[var(--color-foreground,#f7f4ee)]/80 md:text-lg">
+              <p className="mb-6 font-[family-name:var(--font-body)] text-base leading-relaxed text-[#f7f4ee]/80 md:text-lg">
                 {renderHighlighted(scenario.description)}
               </p>
 
               {scenario.supportingInfo && (
-                <div className="mb-8 rounded-lg border-2 border-[var(--color-accent-3,#6fa8c9)]/60 bg-[var(--color-foreground,#f7f4ee)]/[0.03] p-4 font-[family-name:var(--font-body)] text-sm leading-relaxed text-[var(--color-foreground,#f7f4ee)]/60">
+                <div className="mb-8 rounded-lg border-2 border-[var(--color-accent-3,#6fa8c9)]/60 bg-[#f7f4ee]/[0.03] p-4 font-[family-name:var(--font-body)] text-sm leading-relaxed text-[#f7f4ee]/60">
                   {renderHighlighted(scenario.supportingInfo)}
                 </div>
               )}
@@ -154,7 +154,7 @@ export default function QuestionCard({
               {scenario.isEnding ? (
                 <div className="mt-8">
                   {pathSummary && (
-                    <p className="mb-4 inline-block rounded-lg border-2 border-[var(--color-accent-4,#b97a48)] px-3 py-2 font-[family-name:var(--font-serif-accent)] text-[13px] italic text-[var(--color-foreground,#f7f4ee)]/50">
+                    <p className="mb-4 inline-block rounded-lg border-2 border-[var(--color-accent-4,#b97a48)] px-3 py-2 font-[family-name:var(--font-serif-accent)] text-[13px] italic text-[#f7f4ee]/50">
                       Your path: {pathSummary}
                     </p>
                   )}
@@ -170,7 +170,7 @@ export default function QuestionCard({
                       whileTap={{ scale: 0.98 }}
                       initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.5 }}
                       className="mx-auto mt-6 block rounded-xl border-2 border-[var(--color-accent,#e8b23d)] bg-[var(--color-accent,#e8b23d)]/10 px-6 py-3
-                                 font-[family-name:var(--font-body)] text-sm font-semibold text-[var(--color-foreground,#f7f4ee)]
+                                 font-[family-name:var(--font-body)] text-sm font-semibold text-[#f7f4ee]
                                  transition-colors focus-visible:outline-none
                                  focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#e8b23d)]/60">
                       Retry with <strong>{retryInfo.alternateTitle}</strong> instead of <strong>{retryInfo.originalTitle}</strong>
@@ -208,7 +208,7 @@ export default function QuestionCard({
                   <AnimatePresence>
                     {selectedIndex !== null && (
                       <motion.p initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
-                        className="mt-1 font-[family-name:var(--font-body)] text-xs text-[var(--color-foreground,#f7f4ee)]/40">
+                        className="mt-1 font-[family-name:var(--font-body)] text-xs text-[#f7f4ee]/40">
                         Press Enter to continue
                       </motion.p>
                     )}
@@ -245,10 +245,10 @@ export default function QuestionCard({
                 </span>
                 {econConcepts.map((concept, i) => (
                   <div key={i} className="flex flex-col gap-2">
-                    <span className="font-[family-name:var(--font-econ)] text-lg font-semibold italic leading-snug text-[var(--color-foreground,#f7f4ee)]">
+                    <span className="font-[family-name:var(--font-econ)] text-lg font-semibold italic leading-snug text-[#f7f4ee]">
                       {concept.name}
                     </span>
-                    <span className="font-[family-name:var(--font-body)] text-sm leading-relaxed text-[var(--color-foreground,#f7f4ee)]/70">
+                    <span className="font-[family-name:var(--font-body)] text-sm leading-relaxed text-[#f7f4ee]/70">
                       {renderHighlighted(concept.description)}
                     </span>
                   </div>
@@ -287,18 +287,18 @@ function ChoiceButton({ choice, index, isSelected, onClick }: {
                   ${isSelected
                     ? "border-[var(--color-accent,#e8b23d)] bg-[var(--color-accent,#e8b23d)]/10 shadow-[0_0_24px_-6px_var(--color-accent,#e8b23d)]"
                     : index === 0
-                    ? "border-[var(--color-accent-2,#4fae7a)]/40 bg-[var(--color-foreground,#f7f4ee)]/[0.02] hover:border-[var(--color-accent-2,#4fae7a)]"
-                    : "border-[var(--color-accent-3,#6fa8c9)]/40 bg-[var(--color-foreground,#f7f4ee)]/[0.02] hover:border-[var(--color-accent-3,#6fa8c9)]"}`}>
+                    ? "border-[var(--color-accent-2,#4fae7a)]/40 bg-[#f7f4ee]/[0.02] hover:border-[var(--color-accent-2,#4fae7a)]"
+                    : "border-[var(--color-accent-3,#6fa8c9)]/40 bg-[#f7f4ee]/[0.02] hover:border-[var(--color-accent-3,#6fa8c9)]"}`}>
       <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-[family-name:var(--font-body)] text-xs font-semibold
-                    ${isSelected ? "bg-[var(--color-accent,#e8b23d)] text-[var(--color-background,#14181b)]" : "bg-[var(--color-foreground,#f7f4ee)]/10 text-[var(--color-foreground,#f7f4ee)]/60 group-hover:bg-[var(--color-accent,#e8b23d)]/20 group-hover:text-[var(--color-accent,#e8b23d)]"}`}>
+                    ${isSelected ? "bg-[var(--color-accent,#e8b23d)] text-[var(--color-background,#14181b)]" : "bg-[#f7f4ee]/10 text-[#f7f4ee]/60 group-hover:bg-[var(--color-accent,#e8b23d)]/20 group-hover:text-[var(--color-accent,#e8b23d)]"}`}>
         {index + 1}
       </span>
       <span className="flex flex-col gap-1.5 pt-0.5">
-        <span className="font-[family-name:var(--font-body)] text-base text-[var(--color-foreground,#f7f4ee)]/90 md:text-lg">
+        <span className="font-[family-name:var(--font-body)] text-base text-[#f7f4ee]/90 md:text-lg">
           {choice.text}
         </span>
         {choice.description && (
-          <span className="font-[family-name:var(--font-body)] text-xs leading-relaxed text-[var(--color-foreground,#f7f4ee)]/50 md:text-[13px]">
+          <span className="font-[family-name:var(--font-body)] text-xs leading-relaxed text-[#f7f4ee]/50 md:text-[13px]">
             {renderHighlighted(choice.description)}
           </span>
         )}
@@ -316,7 +316,7 @@ function CaseStudyPanel({ caseStudy, side }: { caseStudy?: CaseStudy; side: "lef
       <motion.div initial={{ opacity: 0, x: isLeft ? 12 : -12 }} animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.45, ease: [0.22, 1, 0.36, 1] }} className="pointer-events-auto flex items-center gap-2">
         {!isLeft && <span className="shrink-0 text-[var(--color-accent,#e8b23d)]/50">←</span>}
-        <div className="rounded-lg border-2 bg-[var(--color-foreground,#f7f4ee)]/[0.06] p-3" style={{ borderImage: "linear-gradient(135deg, var(--color-accent-2, #4fae7a), var(--color-accent-3, #6fa8c9), var(--color-accent, #e8b23d)) 1" }}>
+        <div className="rounded-lg border-2 bg-[#f7f4ee]/[0.06] p-3" style={{ borderImage: "linear-gradient(135deg, var(--color-accent-2, #4fae7a), var(--color-accent-3, #6fa8c9), var(--color-accent, #e8b23d)) 1" }}>
           <span className="mb-1.5 block font-[family-name:var(--font-body)] text-[9px] font-bold uppercase tracking-[0.18em]" style={{ color: "#3ddc84" }}>
             This actually happened
           </span>
@@ -324,7 +324,7 @@ function CaseStudyPanel({ caseStudy, side }: { caseStudy?: CaseStudy; side: "lef
             <span>{caseStudy.flag}</span>
             <span>{caseStudy.country}, {caseStudy.year}</span>
           </div>
-          <p className="font-[family-name:var(--font-serif-accent)] text-[15px] italic leading-snug text-[var(--color-foreground,#f7f4ee)]">
+          <p className="font-[family-name:var(--font-serif-accent)] text-[15px] italic leading-snug text-[#f7f4ee]">
             {renderHighlighted(caseStudy.text)}
           </p>
           <SourceTag source={caseStudy.source} />
