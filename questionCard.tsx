@@ -71,7 +71,7 @@ export default function QuestionCard({
           onKeyDown={(e) => { if (e.key === "Enter") commitChoice(0); }}
           initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -40 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="flex h-dvh w-full flex-col items-center justify-center overflow-hidden bg-[var(--color-background,#14181b)] px-6 text-center outline-none"
+          className="flex h-dvh w-full flex-col items-center justify-center overflow-hidden bg-[#14181b] px-6 text-center outline-none"
         >
           <motion.div variants={containerVariants} initial="hidden" animate="visible" className="flex max-w-3xl flex-col items-center gap-5">
             {scenario.isStart && <CropEmojiRow />}
